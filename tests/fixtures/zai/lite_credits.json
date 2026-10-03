@@ -1,0 +1,6 @@
+{"code": 200, "msg": "success", "success": true,
+ "data": {"level": "lite", "limits": [
+   {"type": "CREDIT_LIMIT", "unit": 6, "number": 1, "usage": 10000, "currentValue": 2650,
+    "remaining": 7350, "percentage": 26, "nextResetTime": 1791374400000},
+   {"type": "CREDIT_LIMIT", "unit": 3, "number": 5, "usage": 2000, "currentValue": 340,
+    "remaining": 1660, "percentage": 17, "nextResetTime": 1791034200000}]}}

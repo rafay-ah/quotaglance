@@ -1,0 +1,6 @@
+{
+  "tier": "pro", "status": "active", "character_count": 523400, "character_limit": 500000,
+  "can_extend_character_limit": true, "next_character_count_reset_unix": 1792195200,
+  "voice_slots_used": 41, "voice_limit": 160, "billing_period": "annual_period",
+  "current_overage": {"amount": "4.68", "currency": "usd"}
+}

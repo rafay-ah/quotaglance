@@ -1,0 +1,22 @@
+{
+  "tier": "creator",
+  "character_count": 61234,
+  "character_limit": 100000,
+  "max_character_limit_extension": null,
+  "max_credit_limit_extension": "unlimited",
+  "can_extend_character_limit": true,
+  "allowed_to_extend_character_limit": true,
+  "next_character_count_reset_unix": 1791999000,
+  "voice_slots_used": 7,
+  "professional_voice_slots_used": 1,
+  "voice_limit": 30,
+  "professional_voice_limit": 1,
+  "currency": "usd",
+  "status": "active",
+  "billing_period": "monthly_period",
+  "character_refresh_period": "monthly_period",
+  "next_invoice": {"amount_due_cents": 2200, "next_payment_attempt_unix": 1791999000},
+  "open_invoices": [],
+  "has_open_invoices": false,
+  "current_overage": {"amount": "0", "currency": "usd"}
+}

@@ -1,0 +1,2 @@
+{"code": 200, "success": true, "data": {"limits": [
+  {"type": "TOKENS_LIMIT", "unit": 3, "number": 5, "percentage": 25, "nextResetTime": 1791064800000}]}}
