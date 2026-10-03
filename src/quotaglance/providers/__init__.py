@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from quotaglance.providers.antigravity import AntigravityProvider
 from quotaglance.providers.base import Provider
 from quotaglance.providers.claude import ClaudeProvider
 from quotaglance.providers.codex import CodexProvider
@@ -13,7 +14,9 @@ from quotaglance.providers.jetbrains import JetBrainsProvider
 from quotaglance.providers.kiro import KiroProvider
 from quotaglance.providers.opencode import OpenCodeProvider
 from quotaglance.providers.openrouter import OpenRouterProvider
+from quotaglance.providers.windsurf import WindsurfProvider
 from quotaglance.providers.zai import ZaiProvider
+from quotaglance.providers.zed import ZedProvider
 
 PROVIDER_CLASSES: tuple[type[Provider], ...] = (
     ClaudeProvider,
@@ -21,6 +24,9 @@ PROVIDER_CLASSES: tuple[type[Provider], ...] = (
     CursorProvider,
     CopilotProvider,
     JetBrainsProvider,
+    WindsurfProvider,
+    ZedProvider,
+    AntigravityProvider,
     GeminiProvider,
     KiroProvider,
     ElevenLabsProvider,

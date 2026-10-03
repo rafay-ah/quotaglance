@@ -1,0 +1,16 @@
+{
+  "planName": "Pro",
+  "startTimestamp": 1789895550000,
+  "endTimestamp": 1792487550000,
+  "usage": {
+    "messages": 50000,
+    "usedMessages": 35650,
+    "remainingMessages": 14350,
+    "flowActions": 150000,
+    "usedFlowActions": 0,
+    "remainingFlowActions": 150000,
+    "flexCredits": 123700,
+    "usedFlexCredits": 30925,
+    "remainingFlexCredits": 92775
+  }
+}

@@ -151,3 +151,15 @@ def test_env_token_overrides_db(home):
     snap = CursorProvider().fetch(make_ctx(home, http=http, env={"CURSOR_ACCESS_TOKEN": TOKEN}))
     assert snap.plan == "Ultra"
     assert snap.windows[0].used_percent == 12
+
+
+def test_reading_a_closed_wal_database_leaves_no_sidecar_files(home):
+    db = make_state_db(home)
+    conn = sqlite3.connect(db)
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.close()
+    before = sorted(p.name for p in db.parent.iterdir())
+    from quotaglance.providers.cursor import read_state_values
+
+    assert read_state_values(db, ["cursorAuth/accessToken"])
+    assert sorted(p.name for p in db.parent.iterdir()) == before

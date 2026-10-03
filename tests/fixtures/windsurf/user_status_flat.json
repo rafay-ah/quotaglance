@@ -1,0 +1,9 @@
+{
+  "email": "lead@example.com",
+  "plan_name": "teams",
+  "quota": {
+    "daily_quota_remaining_percent": "0",
+    "weekly_quota_remaining_percent": "37.5",
+    "daily_quota_reset_at_unix": 1791072000
+  }
+}

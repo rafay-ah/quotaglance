@@ -1,0 +1,19 @@
+{
+  "userStatus": {
+    "name": "Dev Example",
+    "email": "dev@example.com",
+    "planStatus": {
+      "planInfo": {
+        "teamsTier": "TEAMS_TIER_PRO",
+        "planName": "Pro"
+      },
+      "planStart": "2026-09-20T09:12:30Z",
+      "planEnd": "2026-10-20T09:12:30Z",
+      "dailyQuotaRemainingPercent": 80,
+      "weeklyQuotaRemainingPercent": 55,
+      "dailyQuotaResetAtUnix": "1791072000",
+      "weeklyQuotaResetAtUnix": "1791417600",
+      "overageBalanceMicros": "964220000"
+    }
+  }
+}

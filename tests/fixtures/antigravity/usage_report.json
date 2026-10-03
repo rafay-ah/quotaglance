@@ -1,0 +1,62 @@
+{
+  "conversation_id": "",
+  "status": "SUCCESS",
+  "response": "quota report",
+  "usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "thinking_tokens": 0,
+    "cache_read_tokens": 0,
+    "total_tokens": 0
+  },
+  "command": {
+    "name": "usage",
+    "data": {
+      "description": "Within each group, models share a weekly limit and a 5-hour limit.",
+      "groups": [
+        {
+          "name": "Gemini Models",
+          "description": "Models: Gemini Flash, Gemini Pro",
+          "buckets": [
+            {
+              "id": "gemini-weekly",
+              "name": "Weekly Limit Remaining",
+              "description": "Weekly limit",
+              "window": "weekly",
+              "remaining_fraction": 0.86,
+              "reset_time": "2026-09-17T18:40:27Z"
+            },
+            {
+              "id": "gemini-5h",
+              "name": "Five Hour Limit Remaining",
+              "description": "5-hour limit",
+              "window": "5h",
+              "remaining_fraction": 0.95,
+              "reset_time": "2026-09-13T03:48:04Z"
+            }
+          ]
+        },
+        {
+          "name": "Claude and GPT models",
+          "description": "Models: Claude, GPT-OSS",
+          "buckets": [
+            {
+              "id": "3p-weekly",
+              "name": "Weekly Limit Remaining",
+              "window": "weekly",
+              "remaining_fraction": 0.64,
+              "reset_time": "2026-09-20T00:39:54Z"
+            },
+            {
+              "id": "3p-5h",
+              "name": "Five Hour Limit Remaining",
+              "window": "5h",
+              "remaining_fraction": 0.73,
+              "reset_time": "2026-09-15T12:52:10Z"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

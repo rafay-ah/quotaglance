@@ -1,0 +1,12 @@
+{
+  "user": { "id": 42, "github_login": "dev" },
+  "plan": {
+    "plan_v3": "zed_pro_trial",
+    "subscription_period": {
+      "started_at": "2026-05-13T00:00:00Z",
+      "ended_at": "2026-06-13T00:00:00Z"
+    },
+    "usage": { "edit_predictions": { "used": 10, "limit": "unlimited" } },
+    "has_overdue_invoices": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "user": {
+    "id": 77,
+    "metrics_id": "0b6f6c55-37e2-4f1e-9d0d-8f7a1c2e9b10",
+    "avatar_url": "https://avatars.githubusercontent.com/u/77?v=4",
+    "github_login": "free-dev",
+    "name": null,
+    "is_staff": false,
+    "accepted_tos_at": "2025-11-02T10:15:00.000Z"
+  },
+  "feature_flags": ["agent-v2"],
+  "plan": {
+    "plan": "zed_free",
+    "plan_v2": "zed_free",
+    "plan_v3": "zed_free",
+    "subscription_period": null,
+    "usage": { "edit_predictions": { "used": 2150, "limit": { "limited": 2000 } } },
+    "trial_started_at": null,
+    "is_usage_based_billing_enabled": false,
+    "is_account_too_young": false,
+    "has_overdue_invoices": false
+  }
+}

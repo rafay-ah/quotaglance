@@ -10,7 +10,6 @@ Cursor app's own session is never disturbed.
 from __future__ import annotations
 
 import sqlite3
-import urllib.parse
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +24,7 @@ from quotaglance.providers.base import (
     ProviderError,
     from_http_error,
 )
+from quotaglance.sqlite_ro import connect_readonly
 from quotaglance.util import clamp, decode_jwt_claims, dig, parse_time, read_json, to_float
 
 SUMMARY_URL = "https://cursor.com/api/usage-summary"
@@ -78,26 +78,23 @@ def decode_value(value: Any) -> str | None:
 
 def read_state_values(db_path: Path, keys: list[str]) -> dict[str, str]:
     """Read keys from Cursor's ItemTable without ever writing to the DB."""
-    uri_path = urllib.parse.quote(str(db_path))
     values: dict[str, str] = {}
-    for suffix in ("?mode=ro", "?mode=ro&immutable=1"):
-        try:
-            conn = sqlite3.connect(f"file:{uri_path}{suffix}", uri=True, timeout=0.25)
-        except sqlite3.Error:
-            continue
-        try:
-            placeholders = ",".join("?" for _ in keys)
-            rows = conn.execute(
-                f"SELECT key, value FROM ItemTable WHERE key IN ({placeholders})", keys).fetchall()
-        except sqlite3.Error:
-            conn.close()
-            continue
-        conn.close()
-        for key, value in rows:
-            decoded = decode_value(value)
-            if decoded:
-                values[key] = decoded
+    try:
+        conn = connect_readonly(db_path)
+    except sqlite3.Error:
         return values
+    try:
+        placeholders = ",".join("?" for _ in keys)
+        rows = conn.execute(
+            f"SELECT key, value FROM ItemTable WHERE key IN ({placeholders})", keys).fetchall()
+    except sqlite3.Error:
+        return values
+    finally:
+        conn.close()
+    for key, value in rows:
+        decoded = decode_value(value)
+        if decoded:
+            values[key] = decoded
     return values
 
 

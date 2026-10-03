@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import re
 import sqlite3
-import urllib.parse
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -28,6 +27,7 @@ from quotaglance.providers.base import (
     ProviderError,
     strip_ansi,
 )
+from quotaglance.sqlite_ro import connect_readonly
 from quotaglance.util import clamp, parse_time, read_json, to_float
 
 LOGIN_HINT = _("Run `kiro-cli login`, or open Kiro and sign in.")
@@ -239,9 +239,10 @@ def _json(value: Any) -> Any:
 
 def db_token(path: Path) -> tuple[dict[str, Any] | None, str | None]:
     """(token JSON, profile ARN) from kiro-cli's SQLite state, opened read-only."""
+    if not path.is_file():
+        return None, None
     try:
-        conn = sqlite3.connect(f"file:{urllib.parse.quote(str(path))}?mode=ro", uri=True,
-                               timeout=0.25)
+        conn = connect_readonly(path)
     except sqlite3.Error:
         return None, None
     try:

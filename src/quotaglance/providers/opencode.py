@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import json
 import sqlite3
-import urllib.parse
 from datetime import datetime, timedelta, timezone, tzinfo
 from pathlib import Path
 from typing import Any
@@ -30,6 +29,7 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.sqlite_ro import connect_readonly
 from quotaglance.util import clamp, parse_time, read_json, to_float
 
 GO_USAGE_URL = "https://opencode.ai/zen/go/v1/usage"
@@ -108,30 +108,23 @@ def db_path(ctx: FetchContext) -> Path | None:
 
 def read_rows(path: Path, provider_id: str, since_ms: int) -> list[tuple[int, float, str]]:
     """Per-step costs for one provider, newest first, from the read-only DB."""
-    quoted = urllib.parse.quote(str(path))
-    last_error: Exception | None = None
-    for suffix in ("?mode=ro", "?mode=ro&immutable=1"):
-        try:
-            conn = sqlite3.connect(f"file:{quoted}{suffix}", uri=True, timeout=0.25)
-        except sqlite3.Error as exc:
-            last_error = exc
-            continue
+    try:
+        conn = connect_readonly(path)
         try:
             rows = conn.execute(ROWS_SQL, {"provider": provider_id}).fetchall()
-        except sqlite3.Error as exc:
-            last_error = exc
-            continue
         finally:
             conn.close()
-        result = []
-        for created, cost, model in rows:
-            cost = to_float(cost)
-            if created and created > 0 and cost is not None and cost >= 0 and created >= since_ms:
-                result.append((int(created), cost, model or ""))
-        return sorted(result, reverse=True)
-    if last_error and "locked" in str(last_error):
-        raise ProviderError(_("OpenCode's history is busy; will retry"), transient=True)
-    return []
+    except sqlite3.Error as exc:
+        if "locked" in str(exc):
+            raise ProviderError(_("OpenCode's history is busy; will retry"),
+                                transient=True) from None
+        return []
+    result = []
+    for created, cost, model in rows:
+        cost = to_float(cost)
+        if created and created > 0 and cost is not None and cost >= 0 and created >= since_ms:
+            result.append((int(created), cost, model or ""))
+    return sorted(result, reverse=True)
 
 
 # -- parsing ----------------------------------------------------------------------

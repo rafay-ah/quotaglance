@@ -1,0 +1,22 @@
+{
+  "planName": "Pro",
+  "startTimestamp": 1771610750000,
+  "endTimestamp": 1774029950000,
+  "usage": {
+    "messages": 50000,
+    "usedMessages": 35650,
+    "remainingMessages": 14350,
+    "flowActions": 150000,
+    "usedFlowActions": 0,
+    "remainingFlowActions": 150000,
+    "flexCredits": 123700,
+    "usedFlexCredits": 0,
+    "remainingFlexCredits": 123700
+  },
+  "quotaUsage": {
+    "dailyRemainingPercent": 9,
+    "weeklyRemainingPercent": 54,
+    "dailyResetAtUnix": 1774080000,
+    "weeklyResetAtUnix": 1774166400
+  }
+}

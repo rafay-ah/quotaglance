@@ -1,0 +1,44 @@
+{
+  "response": {
+    "description": "Within each group, models share a weekly limit and a 5-hour limit.",
+    "groups": [
+      {
+        "displayName": "Gemini Models",
+        "description": "Models: Gemini Flash, Gemini Pro",
+        "buckets": [
+          {
+            "bucketId": "gemini-weekly",
+            "displayName": "Weekly Limit",
+            "remaining": { "remainingFraction": 0.82 },
+            "description": "Fully refreshes in 5 days, 11 hours.",
+            "resetTime": "2026-06-19T08:45:39Z"
+          },
+          {
+            "bucketId": "gemini-5h",
+            "displayName": "Five Hour Limit",
+            "remaining": { "remainingFraction": 0.91 },
+            "description": "Fully refreshes in 4 hours.",
+            "resetTime": "2026-06-15T11:39:34Z"
+          }
+        ]
+      },
+      {
+        "displayName": "Claude and GPT models",
+        "buckets": [
+          {
+            "bucketId": "3p-weekly",
+            "displayName": "Weekly Limit",
+            "remaining": { "remainingFraction": 0.64 },
+            "resetTime": "2026-06-20T00:39:54Z"
+          },
+          {
+            "bucketId": "3p-5h",
+            "displayName": "Five Hour Limit",
+            "remaining": { "remainingFraction": 0.73 },
+            "resetTime": "2026-06-15T12:52:10Z"
+          }
+        ]
+      }
+    ]
+  }
+}
