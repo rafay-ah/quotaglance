@@ -1,0 +1,2 @@
+You are not currently logged in to Augment.
+   Run 'auggie login' to authenticate first.

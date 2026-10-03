@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "lastUsedProvider": "cline",
+  "modes": {},
+  "providers": {
+    "cline": {
+      "settings": {
+        "provider": "cline",
+        "model": "anthropic/claude-sonnet-4.5",
+        "auth": {
+          "accessToken": "workos:eyJhbGciOiJSUzI1NiIsImtpZCI6ImZpeHR1cmUta2lkIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL2FwaS53b3Jrb3MuY29tL3VzZXJfbWFuYWdlbWVudC9jbGllbnRfRklYVFVSRSIsInN1YiI6InVzZXJfMDFKRklYVFVSRVVTRVIwMDAwMDAwMDAwIiwic2lkIjoic2Vzc2lvbl8wMUpGSVhUVVJFU0VTU0lPTjAwMDAwMCIsIm9yZ19pZCI6Im9yZ18wMUpGSVhUVVJFT1JHMDAwMDAwMDAwMDAiLCJpYXQiOjE3OTEwMTE0MDAsImV4cCI6MTc5MTAxMTcwMH0.fixture-signature",
+          "refreshToken": "fixture-refresh-01JFIXTUREREFRESH000000000",
+          "accountId": "user_01JFIXTUREUSER0000000000",
+          "expiresAt": 1791011700000
+        }
+      },
+      "updatedAt": "2026-10-03T07:10:00.000Z",
+      "tokenSource": "oauth"
+    },
+    "openrouter": {
+      "settings": {"provider": "openrouter", "apiKey": "sk-or-v1-fixture"},
+      "updatedAt": "2026-09-30T12:00:00.000Z",
+      "tokenSource": "manual"
+    }
+  }
+}

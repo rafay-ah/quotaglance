@@ -1,0 +1,5 @@
+[
+  {"result": {"data": {"json": {"creditsUsed": 10, "creditsRemaining": 90}}}},
+  {"result": {"data": {"json": {"planName": "Starter"}}}},
+  {"error": {"json": {"message": "Internal server error", "data": {"code": "INTERNAL_SERVER_ERROR"}}}}
+]

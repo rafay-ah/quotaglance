@@ -1,0 +1,1 @@
+{"data":{"user":{"__typename":"UserOutput","user":{"requestLimitInfo":{"isUnlimited":false,"nextRefreshTime":"2026-10-28T19:16:33Z","requestLimit":300,"requestsUsedSinceLastRefresh":300},"bonusGrants":[{"requestCreditsGranted":2500,"requestCreditsRemaining":1730,"expiration":"2027-04-01T00:00:00Z"}],"workspaces":[]}}}}

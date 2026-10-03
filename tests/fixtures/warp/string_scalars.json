@@ -1,0 +1,1 @@
+{"data":{"user":{"__typename":"UserOutput","user":{"requestLimitInfo":{"isUnlimited":null,"nextRefreshTime":"2026-10-28T19:16:33Z","requestLimit":"1500","requestsUsedSinceLastRefresh":"1500"}}}}}

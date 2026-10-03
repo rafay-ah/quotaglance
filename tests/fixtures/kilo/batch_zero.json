@@ -1,0 +1,5 @@
+[
+  {"result": {"data": {"creditBlocks": [], "totalBalance_mUsd": 0, "isFirstPurchase": true, "autoTopUpEnabled": false}}},
+  {"result": {"data": {"subscription": null}}},
+  {"result": {"data": {"enabled": false, "amountCents": 5000, "paymentMethod": null}}}
+]

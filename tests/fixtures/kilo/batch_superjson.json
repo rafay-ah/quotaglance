@@ -1,0 +1,5 @@
+[
+  {"result": {"data": {"json": {"blocks": [{"usedCredits": 25, "totalCredits": 100, "remainingCredits": 75}]}}}},
+  {"result": {"data": {"json": {"plan": {"name": "Kilo Pass Pro"}}}}},
+  {"result": {"data": {"json": {"enabled": true, "paymentMethod": "visa"}}}}
+]

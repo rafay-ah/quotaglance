@@ -1,0 +1,10 @@
+
+╭ Account ───────────────────────────────────────────────╮
+│                                                        │
+│ 287,410 credits remaining                     Max Plan │
+│                                450,000 credits / month │
+│                                                        │
+╰────────────────────────────────────────────────────────╯
+
+ 9 days remaining in this billing cycle (ends 10/12/2026)
+ For more detail, visit https://app.augmentcode.com/account

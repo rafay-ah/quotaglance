@@ -1,0 +1,10 @@
+{
+  "usage": {
+    "startDate": 1790812800000,
+    "endDate": 1793491200000,
+    "standard": {"userTokens": 12500000, "orgTotalTokensUsed": 48000000, "totalAllowance": 20000000, "usedRatio": 0.625, "orgOverageUsed": 0, "basicAllowance": 20000000, "orgOverageLimit": 0},
+    "premium": {"userTokens": 150000, "orgTotalTokensUsed": 600000, "totalAllowance": 1000000, "usedRatio": 0.15, "orgOverageUsed": 0, "basicAllowance": 1000000, "orgOverageLimit": 0}
+  },
+  "source": "cache",
+  "userId": "user_01JFIXTURE0000000000000000"
+}

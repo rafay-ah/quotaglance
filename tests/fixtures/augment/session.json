@@ -1,0 +1,7 @@
+{
+  "accessToken": "aug_fixture_0123456789abcdef0123456789abcdef0123456789abcdef",
+  "tenantURL": "https://d16.api.augmentcode.com/",
+  "scopes": [
+    "email"
+  ]
+}

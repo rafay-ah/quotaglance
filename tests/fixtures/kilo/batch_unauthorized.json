@@ -1,0 +1,4 @@
+[
+  {"result": {"data": {"json": {"creditsUsed": 10, "creditsRemaining": 90}}}},
+  {"error": {"json": {"message": "Unauthorized", "data": {"code": "UNAUTHORIZED", "httpStatus": 401}}}}
+]

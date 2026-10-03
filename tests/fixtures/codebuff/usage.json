@@ -1,0 +1,9 @@
+{
+  "type": "usage-response",
+  "usage": 1250,
+  "remainingBalance": 3750,
+  "balanceBreakdown": {"free": 500, "referral": 250, "referral_legacy": 0, "subscription": 0, "purchase": 3000, "admin": 0, "organization": 0, "ad": 0},
+  "next_quota_reset": "2026-11-01T00:00:00.000Z",
+  "autoTopupAdded": 0,
+  "autoTopupEnabled": true
+}

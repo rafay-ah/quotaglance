@@ -1,0 +1,5 @@
+Signed in as cli@example.com (team)
+Amp Free: $6/$10 remaining (replenishes +$0.5/hour) - https://ampcode.com/settings#amp-free
+Individual credits: $12.50 remaining
+Workspace Test Team: $7.25 remaining
+Workspace Alpha Team: $1,234.56 remaining

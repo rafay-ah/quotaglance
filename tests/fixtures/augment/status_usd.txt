@@ -1,0 +1,13 @@
+
+╭ Account ───────────────────────────────────────────────╮
+│                                                        │
+│ $12.48 remaining                            Indie Plan │
+│                          $20.00 included usage / month │
+│                                                        │
+╰────────────────────────────────────────────────────────╯
+
+ You have used most of your included usage for this billing cycle.
+ Add usage: https://app.augmentcode.com/account/subscription
+
+ Less than a day remaining in this billing cycle (ends 10/4/2026)
+ For more detail, visit https://app.augmentcode.com/account

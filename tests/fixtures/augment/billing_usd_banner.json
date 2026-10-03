@@ -1,0 +1,12 @@
+{
+  "plan_name": "Indie Plan",
+  "usage_unit": 2,
+  "amount_remaining": "12.48",
+  "amount_included_per_cycle": "20.00",
+  "billing_cycle_end_date_iso": "2026-10-04T00:00:00Z",
+  "banner": {
+    "message": "You have used most of your included usage for this billing cycle.",
+    "display_style": "WARNING",
+    "button": {"title": "Add usage", "url": "https://app.augmentcode.com/account/subscription?utm_source=cli"}
+  }
+}

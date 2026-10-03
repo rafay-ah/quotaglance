@@ -1,0 +1,12 @@
+{
+  "userProfile": {"id": "user_01JFIXTURE0000000000000000", "email": "dev@example.com", "role": "member"},
+  "organization": {
+    "id": "org_01JFIXTUREORG00000000000000",
+    "name": "Acme Robotics",
+    "subscription": {
+      "factoryTier": "team",
+      "orbSubscription": {"plan": {"name": "Team", "id": "plan_team_monthly"}, "status": "active"}
+    }
+  },
+  "featureFlags": {"flags": {"droid-core": true}, "configs": {}}
+}

@@ -1,0 +1,20 @@
+{
+  "usesTokenRateLimitsBilling": true,
+  "tokenRateLimitsRolloutEligible": true,
+  "limits": {
+    "standard": {
+      "fiveHour": {"usedPercent": 37, "windowEnd": "2026-10-03T11:00:00.000Z", "secondsRemaining": 9000},
+      "weekly": {"usedPercent": 52, "windowEnd": "2026-10-06T00:00:00.000Z", "secondsRemaining": 228600},
+      "monthly": {"usedPercent": 18, "windowEnd": "2026-10-28T00:00:00.000Z", "secondsRemaining": 2129400}
+    },
+    "core": {
+      "fiveHour": {"usedPercent": 4, "windowEnd": "2026-10-03T10:30:00.000Z"},
+      "weekly": {"usedPercent": 9, "windowEnd": "2026-10-06T00:00:00.000Z"},
+      "monthly": {"usedPercent": 2, "windowEnd": "2026-10-28T00:00:00.000Z"}
+    }
+  },
+  "extraUsageBalanceCents": 2500,
+  "extraUsageAllowed": true,
+  "overagePreference": "droidCore",
+  "canManageOverage": true
+}

@@ -1,0 +1,11 @@
+{
+  "data": {
+    "limits": [
+      {"type": "five_hour", "percentUsed": 12.5, "resetsAt": "2026-10-03T15:00:00Z"},
+      {"type": "experimental_pool", "percentUsed": 77, "resetsAt": "2026-10-03T15:00:00Z"},
+      {"type": "weekly", "percentUsed": 25, "resetsAt": "2026-10-06T00:00:00Z"},
+      {"type": "monthly", "percentUsed": 40, "resetsAt": null}
+    ]
+  },
+  "success": true
+}
