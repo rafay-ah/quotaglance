@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to build and (re)publish, e.g. v0.1.0"
+        description: "Version tag to publish, e.g. v0.1.0 (created on the selected branch if it doesn't exist)"
         required: true
 
 permissions:
@@ -21,7 +21,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ env.TAG }}
+          fetch-depth: 0  # with tags, to see whether TAG exists yet
+      - name: Select the commit to release
+        run: |
+          if git rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
+            git checkout -q "refs/tags/$TAG"
+          elif [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            echo "Tag $TAG not found"; exit 1
+          fi
+          echo "RELEASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "Releasing $TAG from $(git rev-parse --short HEAD)"
       - name: Check the tag matches the version
         run: |
           version="$(sed -n 's/^__version__ = "\(.*\)"/\1/p' src/quotaglance/__init__.py)"
@@ -78,5 +87,6 @@ jobs:
           if gh release view "$TAG" > /dev/null 2>&1; then
             gh release upload "$TAG" dist/* --clobber
           else
-            gh release create "$TAG" dist/* --title "QuotaGlance ${TAG#v}" --notes-file notes.md
+            gh release create "$TAG" dist/* --target "$RELEASE_SHA" \
+              --title "QuotaGlance ${TAG#v}" --notes-file notes.md
           fi
