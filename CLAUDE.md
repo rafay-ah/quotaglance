@@ -70,5 +70,12 @@ python3 scripts/provider_table.py      # refresh the README provider table
   the tool instead. In-memory refresh only where rotation cannot happen.
 - Prefer local data, then the tool's CLI, then its usage endpoint, then API keys
   (stored in GNOME Keyring). No browser-cookie scraping.
+- Reuse keys other tools already hold through `providers/keysources.py`
+  (OpenCode's `auth.json`, Claude Code's `settings.json`) instead of copying
+  that code into a provider.
+- Pass `follow_redirects=False` when a token must never reach another host;
+  `net.Http` already drops credentials on cross-host redirects.
+- Hints and messages are plain text; wrap commands in backticks and the UI shows
+  them in monospace.
 - Window labels stay short (12 characters or fewer). Every new provider needs
   fixtures and tests in `tests/`.
