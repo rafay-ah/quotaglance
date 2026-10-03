@@ -35,10 +35,10 @@ H = 3600
 D = 86400
 
 DEMO: dict[str, tuple[str, str, list[DemoWindow]]] = {
-    "claude": ("Max 5x", "OAuth usage API", [
+    "claude": ("Max 5x", "Anthropic API", [
         DemoWindow("session", "Session", 42, 9.0, 2 * H + 13 * 60, 5 * H),
         DemoWindow("weekly", "Weekly", 67, 0.6, 3 * D + 4 * H, 7 * D),
-        DemoWindow("weekly_opus", "Opus", 31, 0.4, 3 * D + 4 * H, 7 * D),
+        DemoWindow("weekly_sonnet", "Sonnet only", 31, 0.4, 3 * D + 4 * H, 7 * D),
     ]),
     "codex": ("Plus", "Session logs", [
         DemoWindow("session", "5-hour", 18, 6.0, 3 * H + 47 * 60, 5 * H),
