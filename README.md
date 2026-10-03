@@ -180,6 +180,20 @@ How the data is read, in short:
 Tokens are **never refreshed or rewritten** when a refresh could rotate them and sign you out of
 the original tool. If a sign-in has expired, QuotaGlance tells you to open that tool once.
 
+### Claude Code and Codex in detail
+
+Both have a **Data source** setting in Preferences → Providers.
+
+- **Claude Code.** *Automatic* reads the usage endpoint Claude Code's `/usage` screen uses, at
+  most every 5 minutes, with the sign-in Claude Code saved. Turn on **Status line bridge** to get
+  the exact 5-hour and weekly numbers from Claude Code itself with no network calls at all:
+  QuotaGlance wraps your status line (your own command keeps working, and switching it off
+  restores it). *Local logs only* estimates usage from `~/.claude/projects` transcripts.
+- **Codex.** The session logs in `~/.codex/sessions` already carry your limits after every turn,
+  so they work offline. *Automatic* adds the ChatGPT usage endpoint (what `/status` shows) while
+  Codex's token is fresh, and otherwise asks `codex app-server`, which renews its own login
+  safely. Set **Codex home** if you use a custom `CODEX_HOME`.
+
 > [!NOTE]
 > Several providers have no public quota API, so QuotaGlance uses the same endpoints as their
 > official apps and CLIs. They can change without notice. If a provider breaks, please
