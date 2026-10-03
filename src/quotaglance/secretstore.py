@@ -9,10 +9,24 @@ from __future__ import annotations
 
 import logging
 import threading
+import time
 
 from quotaglance import APP_ID
 
 log = logging.getLogger(__name__)
+
+# When the Secret Service doesn't answer, every libsecret call blocks for the
+# D-Bus timeout (25 s). After one such failure, stop asking for a while.
+OUTAGE_PAUSE = 300.0
+_OUTAGE_DOMAINS = ("g-io-error-quark", "g-dbus-error-quark")
+
+
+def is_outage(exc: Exception) -> bool:
+    """True when the Secret Service itself is unreachable (not a missing item)."""
+    domain = getattr(exc, "domain", None)
+    if isinstance(domain, str):
+        return domain in _OUTAGE_DOMAINS
+    return "org.freedesktop.secrets" in str(exc) or "Timeout was reached" in str(exc)
 
 
 class SecretStore:
@@ -64,6 +78,7 @@ class KeyringSecretStore(SecretStore):
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._cache: dict[tuple[str, str], str | None] = {}
+        self._down_until = 0.0
         try:
             import gi
 
@@ -85,17 +100,32 @@ class KeyringSecretStore(SecretStore):
         )
         self.available = True
 
+    @property
+    def responding(self) -> bool:
+        return time.monotonic() >= self._down_until
+
+    def _failed(self, what: str, exc: Exception) -> None:
+        if not is_outage(exc):
+            log.warning("Keyring %s failed: %s", what, exc)
+            return
+        if self.responding:
+            log.warning("GNOME Keyring is not responding (%s); trying again in %d minutes",
+                        exc, OUTAGE_PAUSE // 60)
+        self._down_until = time.monotonic() + OUTAGE_PAUSE
+
     def lookup(self, provider: str, key: str = "api_key") -> str | None:
         if not self.available:
             return None
         with self._lock:
             if (provider, key) in self._cache:
                 return self._cache[(provider, key)]
+        if not self.responding:
+            return None
         try:
             value = self._secret.password_lookup_sync(
                 self._schema, {"provider": provider, "key": key}, None)
         except Exception as exc:  # locked keyring, no Secret Service, ...
-            log.warning("Keyring lookup failed for %s/%s: %s", provider, key, exc)
+            self._failed(f"lookup for {provider}/{key}", exc)
             return None
         with self._lock:
             self._cache[(provider, key)] = value
@@ -111,6 +141,7 @@ class KeyringSecretStore(SecretStore):
         except Exception as exc:
             log.error("Keyring store failed for %s/%s: %s", provider, key, exc)
             return False
+        self._down_until = 0.0  # it answered
         with self._lock:
             self._cache[(provider, key)] = value
         return bool(ok)
@@ -129,7 +160,7 @@ class KeyringSecretStore(SecretStore):
         return bool(removed)
 
     def search(self, attributes: dict[str, str]) -> list[tuple[dict[str, str], str]]:
-        if not self.available:
+        if not self.available or not self.responding:
             return []
         Secret = self._secret
         schema = Secret.Schema.new(
@@ -139,7 +170,7 @@ class KeyringSecretStore(SecretStore):
         try:
             items = Secret.password_search_sync(schema, attributes, flags, None)
         except Exception as exc:
-            log.warning("Keyring search failed: %s", exc)
+            self._failed("search", exc)
             return []
         results = []
         for item in items or []:
