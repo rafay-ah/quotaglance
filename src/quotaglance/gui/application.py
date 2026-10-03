@@ -407,21 +407,29 @@ class QuotaGlanceApp(Adw.Application):
                      else _("Waiting for data…"), enabled=False),
             MenuItem(separator=True),
         ]
+        compact = len(views) > 4  # long lists collapse into one submenu per provider
         for view in views:
-            title = view.name + (f"  ·  {view.plan}" if view.plan else "")
-            items.append(MenuItem(title, self.show_window))
+            rows: list[MenuItem] = []
             if view.message and view.status != "ok":
-                items.append(MenuItem("    " + view.message, self.show_window))
-            for window in view.windows[:3]:
+                rows.append(MenuItem(view.message, self.show_window))
+            for window in view.windows[:4 if compact else 3]:
                 if window.percent is not None:
                     filled = round(window.fraction * 10)
                     bar = "▰" * filled + "▱" * (10 - filled)
-                    text = f"    {window.label}  {bar}  {window.percent_text}"
+                    text = f"{window.label}  {bar}  {window.percent_text}"
                 else:
-                    text = f"    {window.label}  {window.amount_text or window.detail or ''}"
+                    text = f"{window.label}  {window.amount_text or window.detail or ''}"
                 if window.countdown:
                     text += f"  ·  {window.countdown}"
-                items.append(MenuItem(text, self.show_window))
+                rows.append(MenuItem(text, self.show_window))
+            title = view.name + (f"  ·  {view.plan}" if view.plan else "")
+            if compact:
+                if view.peak is not None:
+                    title += f"  —  {view.peak.percent_text}"
+                items.append(MenuItem(title, self.show_window, children=rows))
+            else:
+                items.append(MenuItem(title, self.show_window))
+                items.extend(MenuItem("    " + row.label, row.callback) for row in rows)
         if views:
             items.append(MenuItem(separator=True))
         items += [

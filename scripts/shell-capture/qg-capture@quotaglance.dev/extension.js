@@ -49,8 +49,11 @@ export default class CaptureExtension extends Extension {
             if (cmd === 'wait') {
                 delay = parseInt(arg, 10);
             } else if (cmd === 'open-menu') {
-                const indicator = Main.panel.statusArea[arg || INDICATOR];
-                this._log(`open-menu ${arg || INDICATOR}: ${indicator ? 'found' : 'missing'}`);
+                // open-menu[:<status-area key or prefix>]
+                const wanted = step.slice('open-menu:'.length) || INDICATOR;
+                const key = Object.keys(Main.panel.statusArea).find(k => k.startsWith(wanted));
+                const indicator = key ? Main.panel.statusArea[key] : null;
+                this._log(`open-menu ${wanted}: ${indicator ? key : 'missing'}`);
                 indicator?.menu.open(false);
                 delay = 1200;
             } else if (cmd === 'close-menu') {
