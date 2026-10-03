@@ -1,0 +1,8 @@
+{
+  "uuid": "quotaglance@rafay-ah.github.io",
+  "name": "QuotaGlance",
+  "description": "Your AI coding quotas at a glance: a usage meter in the top bar with session and weekly limits and reset countdowns for Claude Code, Codex, Cursor, Copilot and more. Requires the QuotaGlance app.",
+  "shell-version": ["45", "46", "47", "48", "49", "50", "51"],
+  "url": "https://github.com/rafay-ah/quotaglance",
+  "version-name": "0.1.0"
+}

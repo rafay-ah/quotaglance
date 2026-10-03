@@ -1,0 +1,6 @@
+{
+  "uuid": "qg-capture@quotaglance.dev",
+  "name": "QuotaGlance screenshot helper (development only)",
+  "description": "Takes README screenshots of the QuotaGlance indicator inside a headless GNOME Shell.",
+  "shell-version": ["45", "46", "47", "48", "49", "50", "51"]
+}

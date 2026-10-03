@@ -1,0 +1,55 @@
+/* QuotaGlance GNOME Shell extension */
+
+.qg-panel-box { spacing: 5px; }
+.qg-panel-ring { width: 16px; height: 16px; }
+.qg-panel-label { font-weight: bold; font-feature-settings: "tnum"; }
+
+.qg-menu { min-width: 372px; }
+
+.qg-header { spacing: 12px; padding: 2px 2px 4px 2px; }
+.qg-header-title { font-weight: bold; font-size: 1.05em; }
+.qg-header-sub { font-size: 0.85em; }
+
+.qg-icon-button {
+  padding: 7px;
+  border-radius: 99px;
+}
+.qg-icon-button:hover { background-color: rgba(128, 128, 128, 0.18); }
+.qg-icon-button:active { background-color: rgba(128, 128, 128, 0.28); }
+
+.qg-provider-item { padding-top: 7px; padding-bottom: 7px; }
+.qg-provider { spacing: 12px; }
+.qg-provider-col { spacing: 4px; }
+.qg-provider-name { font-weight: bold; }
+.qg-plan { font-size: 0.82em; font-weight: bold; }
+
+.qg-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+}
+.qg-badge-text { color: white; font-weight: 800; font-size: 0.78em; }
+
+.qg-window-row { spacing: 10px; }
+.qg-window-label { font-size: 0.86em; font-weight: bold; width: 78px; }
+.qg-window-pct { font-size: 0.86em; font-weight: bold; min-width: 34px; text-align: right;
+  font-feature-settings: "tnum"; }
+.qg-window-value { font-size: 0.86em; font-feature-settings: "tnum"; }
+.qg-window-reset { font-size: 0.82em; font-feature-settings: "tnum"; min-width: 52px; }
+
+.qg-scroll { padding: 0; }
+
+.qg-bar-track {
+  height: 6px;
+  border-radius: 3px;
+  background-color: rgba(128, 128, 128, 0.32);
+}
+.qg-bar-fill {
+  height: 6px;
+  border-radius: 3px;
+}
+
+.qg-note { font-size: 0.85em; }
+
+.qg-warning { color: #f6c343; }
+.qg-critical { color: #ff6b6b; }
