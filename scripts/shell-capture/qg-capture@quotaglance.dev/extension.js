@@ -62,6 +62,15 @@ export default class CaptureExtension extends Extension {
             } else if (cmd === 'shot') {
                 this._shot(`${this._dir}/${arg}.png`);
                 delay = 1500;
+            } else if (cmd === 'action') {
+                // action:<app action>[:<string parameter>] via org.gtk.Actions
+                const [, name, value] = step.split(':');
+                const params = value === undefined ? [] : [new GLib.Variant('s', value)];
+                Gio.DBus.session.call('io.github.rafay_ah.QuotaGlance',
+                    '/io/github/rafay_ah/QuotaGlance', 'org.gtk.Actions', 'Activate',
+                    new GLib.Variant('(sava{sv})', [name, params, {}]), null,
+                    Gio.DBusCallFlags.NONE, -1, null, null);
+                delay = 1200;
             } else if (cmd === 'clear-notifications') {
                 for (const source of Main.messageTray.getSources())
                     source.destroy();

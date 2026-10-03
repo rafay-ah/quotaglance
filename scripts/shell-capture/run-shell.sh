@@ -69,6 +69,7 @@ dbus-run-session -- bash -c "
   gsettings set org.gnome.shell welcome-dialog-last-shown-version '999'
   gsettings set org.gnome.desktop.interface color-scheme 'prefer-$SCHEME'
   gsettings set org.gnome.desktop.interface enable-animations false
+  gsettings set org.gnome.desktop.interface font-name 'Inter 11' 
   if [ -n \"\${QG_NO_BANNERS:-}\" ]; then gsettings set org.gnome.desktop.notifications show-banners false; fi
   gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/gnome/$BG'
   gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/gnome/$BG'
