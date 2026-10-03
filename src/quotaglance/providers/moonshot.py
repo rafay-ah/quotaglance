@@ -26,8 +26,8 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.providers.keysources import claude_code_env, opencode_keys
 from quotaglance.timefmt import format_amount
-from quotaglance.util import read_json
 
 # Only these two origins ever receive the key.
 HOSTS = {"international": "https://api.moonshot.ai", "china": "https://api.moonshot.cn"}
@@ -48,33 +48,6 @@ def _clean(value: str | None) -> str:
     return (value or "").strip().strip("\"'").strip()
 
 
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
-
-
-def _claude_code_env(ctx: FetchContext) -> tuple[str, str | None]:
-    """(``ANTHROPIC_BASE_URL``, token) from Claude Code's ``settings.json``."""
-    path = ctx.path("~/.claude/settings.json")
-    try:
-        env = (read_json(path) or {}).get("env") if path.is_file() else None
-    except (OSError, ValueError, AttributeError):
-        env = None
-    if not isinstance(env, dict):
-        return "", None
-    token = env.get("ANTHROPIC_AUTH_TOKEN") or env.get("ANTHROPIC_API_KEY")
-    return str(env.get("ANTHROPIC_BASE_URL") or ""), str(token).strip() if token else None
-
-
 def find_key(ctx: FetchContext) -> tuple[str | None, str, str]:
     """Return (key, region, where it came from)."""
     region = _region(ctx.settings.get("region"))
@@ -85,11 +58,11 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str, str]:
         value = _clean(ctx.env.get(name))
         if value:
             return value, _region(ctx.env.get("MOONSHOT_REGION"), region), f"${name}"
-    keys = _opencode_keys(ctx)
+    keys = opencode_keys(ctx)
     for entry, entry_region in (("moonshotai", "international"), ("moonshotai-cn", "china")):
         if keys.get(entry):
             return keys[entry], entry_region, _("OpenCode sign-in")
-    base, token = _claude_code_env(ctx)
+    base, token = claude_code_env(ctx)
     for entry_region, host in HOSTS.items():
         if token and base.startswith(f"{host}/anthropic"):
             return token, entry_region, _("Claude Code settings")

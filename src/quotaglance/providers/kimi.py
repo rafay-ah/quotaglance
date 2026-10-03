@@ -29,6 +29,7 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.providers.keysources import claude_code_env, opencode_keys
 from quotaglance.timefmt import format_amount
 from quotaglance.util import clamp, dig, first, parse_time, read_json, title_case_plan, to_float
 
@@ -55,33 +56,6 @@ def usages_url(ctx: FetchContext, region: str) -> str:
             return override + "/usages"
         return override + ("/v1/usages" if override.endswith("/coding") else "/coding/v1/usages")
     return HOSTS.get(region, HOSTS["china"]) + "/usages"
-
-
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
-
-
-def _claude_code_env(ctx: FetchContext) -> tuple[str, str | None]:
-    """(``ANTHROPIC_BASE_URL``, token) from Claude Code's ``settings.json``."""
-    path = ctx.path("~/.claude/settings.json")
-    try:
-        env = (read_json(path) or {}).get("env") if path.is_file() else None
-    except (OSError, ValueError, AttributeError):
-        env = None
-    if not isinstance(env, dict):
-        return "", None
-    token = env.get("ANTHROPIC_AUTH_TOKEN") or env.get("ANTHROPIC_API_KEY")
-    return str(env.get("ANTHROPIC_BASE_URL") or ""), str(token).strip() if token else None
 
 
 def cli_home(ctx: FetchContext) -> Path:
@@ -126,11 +100,11 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str, str]:
         value = (ctx.env.get(name) or "").strip()
         if value:
             return value, region, f"${name}"
-    keys = _opencode_keys(ctx)
+    keys = opencode_keys(ctx)
     for entry, entry_region in (*OPENCODE_ENTRIES, ("kimi-for-coding", region)):
         if keys.get(entry):
             return keys[entry], entry_region, _("OpenCode sign-in")
-    base, token = _claude_code_env(ctx)
+    base, token = claude_code_env(ctx)
     if token and base.startswith("https://api.kimi.com/coding"):
         return token, "china", _("Claude Code settings")
     if token and base.startswith("https://api.kimi.ai/coding"):

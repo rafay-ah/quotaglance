@@ -23,26 +23,12 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.providers.keysources import opencode_keys
 from quotaglance.timefmt import format_amount
-from quotaglance.util import read_json
 
 CREDITS_URL = "https://ai-gateway.vercel.sh/v1/credits"
 ENV = ("AI_GATEWAY_API_KEY",)
 DECIMAL = re.compile(r"-?\d+(?:\.\d+)?")
-
-
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
 
 
 def find_key(ctx: FetchContext) -> tuple[str | None, str]:
@@ -54,7 +40,7 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str]:
         value = (ctx.env.get(name) or "").strip()
         if value:
             return value, f"${name}"
-    key = _opencode_keys(ctx).get("vercel")
+    key = opencode_keys(ctx).get("vercel")
     if key:
         return key, _("OpenCode sign-in")
     return None, ""

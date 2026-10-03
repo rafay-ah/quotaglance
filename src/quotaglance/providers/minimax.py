@@ -26,8 +26,9 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.providers.keysources import claude_code_env, opencode_keys
 from quotaglance.timefmt import format_amount
-from quotaglance.util import clamp, dig, parse_time, read_json, to_float
+from quotaglance.util import clamp, dig, parse_time, to_float
 
 HOSTS = {"global": "https://api.minimax.io", "cn": "https://api.minimaxi.com"}
 PATHS = ("/v1/token_plan/remains", "/v1/api/openplatform/coding_plan/remains")
@@ -47,33 +48,6 @@ WEEKLY = ("current_weekly_total_count", "current_weekly_usage_count",
 KEY_HINT = _("Paste your Token Plan key (sk-cp-…) below and check the API region.")
 
 
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
-
-
-def _claude_code_env(ctx: FetchContext) -> tuple[str, str | None]:
-    """(``ANTHROPIC_BASE_URL``, token) from Claude Code's ``settings.json``."""
-    path = ctx.path("~/.claude/settings.json")
-    try:
-        env = (read_json(path) or {}).get("env") if path.is_file() else None
-    except (OSError, ValueError, AttributeError):
-        env = None
-    if not isinstance(env, dict):
-        return "", None
-    token = env.get("ANTHROPIC_AUTH_TOKEN") or env.get("ANTHROPIC_API_KEY")
-    return str(env.get("ANTHROPIC_BASE_URL") or ""), str(token).strip() if token else None
-
-
 def _candidates(ctx: FetchContext) -> Iterator[tuple[str, str, str]]:
     """Every MiniMax key on this machine as (key, region, where it came from)."""
     region = "cn" if ctx.settings.get("region") == "cn" else "global"
@@ -84,12 +58,12 @@ def _candidates(ctx: FetchContext) -> Iterator[tuple[str, str, str]]:
         value = (ctx.env.get(name) or "").strip()
         if value:
             yield value, region, f"${name}"
-    keys = _opencode_keys(ctx)
+    keys = opencode_keys(ctx)
     for entry, entry_region in OPENCODE_ENTRIES:
         key = keys.get(entry)
         if key and (entry.endswith("coding-plan") or key.startswith("sk-cp-")):
             yield key, entry_region, _("OpenCode sign-in")
-    base, token = _claude_code_env(ctx)
+    base, token = claude_code_env(ctx)
     if token and "minimax.io" in base:
         yield token, "global", _("Claude Code settings")
     elif token and ("minimaxi.com" in base or "minimax.cn" in base):

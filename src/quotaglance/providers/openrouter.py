@@ -25,8 +25,9 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.providers.keysources import opencode_keys
 from quotaglance.timefmt import format_amount
-from quotaglance.util import UTC, clamp, read_json, to_float
+from quotaglance.util import UTC, clamp, to_float
 
 API_URL = "https://openrouter.ai/api/v1"
 ENV = ("OPENROUTER_API_KEY",)
@@ -41,20 +42,6 @@ def api_url(ctx: FetchContext) -> str:
     return override if override.startswith("https://") else API_URL
 
 
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
-
-
 def find_key(ctx: FetchContext) -> tuple[str | None, str]:
     """Return (key, where it came from)."""
     stored = ctx.secret("api_key", (), provider="openrouter")
@@ -64,7 +51,7 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str]:
         value = (ctx.env.get(name) or "").strip()
         if value:
             return value, f"${name}"
-    key = _opencode_keys(ctx).get("openrouter")
+    key = opencode_keys(ctx).get("openrouter")
     if key:
         return key, _("OpenCode sign-in")
     return None, ""

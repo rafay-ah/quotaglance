@@ -25,28 +25,15 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
+from quotaglance.providers.keysources import opencode_keys
 from quotaglance.timefmt import format_amount
-from quotaglance.util import UTC, first, parse_time, read_json, to_float
+from quotaglance.util import UTC, first, parse_time, to_float
 
 BALANCE_URL = "https://api.poe.com/usage/current_balance"
 HISTORY_URL = "https://api.poe.com/usage/points_history"
 ENV = ("POE_API_KEY",)
 HISTORY_DAYS = 30
 MAX_PAGES = 5
-
-
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
 
 
 def find_key(ctx: FetchContext) -> tuple[str | None, str]:
@@ -58,7 +45,7 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str]:
         value = (ctx.env.get(name) or "").strip()
         if value:
             return value, f"${name}"
-    key = _opencode_keys(ctx).get("poe")
+    key = opencode_keys(ctx).get("poe")
     if key:
         return key, _("OpenCode sign-in")
     return None, ""

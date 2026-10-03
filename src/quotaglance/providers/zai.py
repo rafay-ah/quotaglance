@@ -24,7 +24,8 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
-from quotaglance.util import clamp, parse_time, read_json, title_case_plan, to_float
+from quotaglance.providers.keysources import claude_code_env, opencode_keys
+from quotaglance.util import clamp, parse_time, title_case_plan, to_float
 
 HOSTS = {"global": "https://api.z.ai", "cn": "https://open.bigmodel.cn"}
 QUOTA_PATH = "/api/monitor/usage/quota/limit"
@@ -46,30 +47,16 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str, str]:
     for name in CN_ENV:
         if ctx.env.get(name, "").strip() and region != "global":
             return ctx.env[name].strip(), "cn", f"${name}"
-    auth = ctx.data_home / "opencode" / "auth.json"
-    if auth.is_file():
-        try:
-            data = read_json(auth)
-        except (OSError, ValueError):
-            data = {}
-        for entry, entry_region in (("zai-coding-plan", "global"),
-                                    ("zhipuai-coding-plan", "cn"),
-                                    ("zai", "global"), ("zhipuai", "cn")):
-            key = (data.get(entry) or {}).get("key") if isinstance(data, dict) else None
-            if key:
-                return str(key).strip(), entry_region, _("OpenCode sign-in")
-    settings = ctx.path("~/.claude/settings.json")
-    if settings.is_file():
-        try:
-            env = (read_json(settings) or {}).get("env") or {}
-        except (OSError, ValueError, AttributeError):
-            env = {}
-        base = str(env.get("ANTHROPIC_BASE_URL") or "")
-        token = env.get("ANTHROPIC_AUTH_TOKEN") or env.get("ANTHROPIC_API_KEY")
-        if token and "api.z.ai" in base:
-            return str(token).strip(), "global", _("Claude Code settings")
-        if token and "bigmodel.cn" in base:
-            return str(token).strip(), "cn", _("Claude Code settings")
+    keys = opencode_keys(ctx)
+    for entry, entry_region in (("zai-coding-plan", "global"), ("zhipuai-coding-plan", "cn"),
+                                ("zai", "global"), ("zhipuai", "cn")):
+        if keys.get(entry):
+            return keys[entry], entry_region, _("OpenCode sign-in")
+    base, token = claude_code_env(ctx)
+    if token and "api.z.ai" in base:
+        return token, "global", _("Claude Code settings")
+    if token and "bigmodel.cn" in base:
+        return token, "cn", _("Claude Code settings")
     return None, "global", ""
 
 

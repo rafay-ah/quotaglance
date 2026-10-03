@@ -26,7 +26,8 @@ from quotaglance.providers.base import (
     api_key_setting,
     from_http_error,
 )
-from quotaglance.util import clamp, first, parse_time, read_json, to_float
+from quotaglance.providers.keysources import opencode_keys
+from quotaglance.util import clamp, first, parse_time, to_float
 
 QUOTAS_URL = "https://api.synthetic.new/v2/quotas"
 ENV = ("SYNTHETIC_API_KEY",)
@@ -42,20 +43,6 @@ RESET_KEYS = ("resetAt", "reset_at", "resetsAt", "resets_at", "renewsAt", "renew
               "periodEnd", "period_end", "expiresAt", "expires_at")
 
 
-def _opencode_keys(ctx: FetchContext) -> dict[str, str]:
-    """API keys saved by ``opencode auth login``, by provider id (read-only)."""
-    path = ctx.data_home / "opencode" / "auth.json"
-    try:
-        data = read_json(path) if path.is_file() else {}
-    except (OSError, ValueError):
-        data = {}
-    if not isinstance(data, dict):
-        return {}
-    return {name: entry["key"].strip() for name, entry in data.items()
-            if isinstance(entry, dict) and isinstance(entry.get("key"), str)
-            and entry["key"].strip()}
-
-
 def find_key(ctx: FetchContext) -> tuple[str | None, str]:
     """Return (key, where it came from)."""
     stored = ctx.secret("api_key", (), provider="synthetic")
@@ -65,7 +52,7 @@ def find_key(ctx: FetchContext) -> tuple[str | None, str]:
         value = (ctx.env.get(name) or "").strip().strip("\"'").strip()
         if value:
             return value, f"${name}"
-    key = _opencode_keys(ctx).get("synthetic")
+    key = opencode_keys(ctx).get("synthetic")
     if key:
         return key, _("OpenCode sign-in")
     return None, ""
