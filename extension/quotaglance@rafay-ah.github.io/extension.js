@@ -246,7 +246,7 @@ class QuotaIndicator extends PanelMenu.Button {
         const failed = ['error', 'not_configured', 'stale'].includes(provider.status);
         if (failed && provider.message) {
             const note = new St.Label({
-                text: provider.message,
+                text: provider.message.replaceAll('`', ''),
                 style_class: 'qg-note',
             });
             note.clutter_text.line_wrap = true;

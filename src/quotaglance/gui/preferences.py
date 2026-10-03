@@ -7,10 +7,11 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Adw, GLib, Gtk  # noqa: E402
+from gi.repository import Adw, Gtk  # noqa: E402
 
 from quotaglance.config import REFRESH_CHOICES, WIDGET_SIZES  # noqa: E402
 from quotaglance.gui.components import Badge  # noqa: E402
+from quotaglance.gui.markup import markup  # noqa: E402
 from quotaglance.i18n import _, ngettext  # noqa: E402
 from quotaglance.models import Status  # noqa: E402
 
@@ -24,7 +25,7 @@ CATEGORIES = (
 
 def esc(text: str | None) -> str:
     """libadwaita renders titles and subtitles as Pango markup."""
-    return GLib.markup_escape_text(text or "")
+    return markup(text)
 
 
 def _switch_row(title: str, subtitle: str, active: bool, on_change) -> Adw.SwitchRow:

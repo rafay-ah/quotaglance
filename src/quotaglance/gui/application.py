@@ -411,7 +411,7 @@ class QuotaGlanceApp(Adw.Application):
         for view in views:
             rows: list[MenuItem] = []
             if view.message and view.status != "ok":
-                rows.append(MenuItem(view.message, self.show_window))
+                rows.append(MenuItem(view.message.replace("`", ""), self.show_window))
             for window in view.windows[:4 if compact else 3]:
                 if window.percent is not None:
                     filled = round(window.fraction * 10)

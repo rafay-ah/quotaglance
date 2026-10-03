@@ -19,6 +19,7 @@ from quotaglance.gui.components import (  # noqa: E402
     accent_for,
     set_severity_class,
 )
+from quotaglance.gui.markup import markup  # noqa: E402
 from quotaglance.i18n import _  # noqa: E402
 from quotaglance.models import Severity, Status  # noqa: E402
 from quotaglance.presenter import ProviderView, WindowView, build_views, headline  # noqa: E402
@@ -200,7 +201,7 @@ class ProviderCard(Gtk.Box):
         elif view.status in (Status.ERROR.value, Status.STALE.value) and view.message:
             note = view.message + (f"\n{view.hint}" if view.hint else "")
             icon = "dialog-warning-symbolic"
-        self.note.set_label(note or "")
+        self.note.set_markup(markup(note))
         self.note_icon.set_from_icon_name(icon)
         self.note_box.set_visible(bool(note))
         self.setup_button.set_visible(view.status == Status.NOT_CONFIGURED.value)
