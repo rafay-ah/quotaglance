@@ -62,6 +62,10 @@ export default class CaptureExtension extends Extension {
             } else if (cmd === 'shot') {
                 this._shot(`${this._dir}/${arg}.png`);
                 delay = 1500;
+            } else if (cmd === 'clear-notifications') {
+                for (const source of Main.messageTray.getSources())
+                    source.destroy();
+                delay = 600;
             } else if (cmd === 'overview-hide') {
                 Main.overview.hide();
                 delay = 800;
@@ -81,7 +85,9 @@ export default class CaptureExtension extends Extension {
                         win.activate(global.get_current_time());
                 }
             } else if (cmd === 'log') {
-                const ids = Object.keys(Main.panel.statusArea).join(' ');
+                const ids = Object.entries(Main.panel.statusArea)
+                    .map(([key, item]) => `${key}${item.container?.visible === false ? '(hidden)' : ''}`)
+                    .join(' ');
                 this._log(`status area: ${ids}`);
             } else if (cmd === 'quit') {
                 this._log('done');

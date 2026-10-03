@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run QuotaGlance inside a throwaway headless GNOME Shell and take screenshots.
 #
-#   scripts/shell-capture/run-shell.sh OUTDIR [dark|light] [extension|tray] [STEPS]
+#   scripts/shell-capture/run-shell.sh OUTDIR [dark|light] [extension|tray|both] [STEPS]
 #
 # Development tool for README screenshots and for exercising the Shell
 # extension / tray fallback end to end. Needs gnome-shell, dbus and the
@@ -15,7 +15,8 @@ if [ "$(id -u)" = "0" ]; then
   id qgdemo >/dev/null 2>&1 || useradd --create-home --shell /bin/bash qgdemo
   mkdir -p "$OUT" && chown qgdemo "$OUT"
   exec runuser -u qgdemo -- env PYTHON="${PYTHON:-python3}" QG_SEED_CONFIG="${QG_SEED_CONFIG:-}" \
-    "$0" "$@"
+    QG_NO_BANNERS="${QG_NO_BANNERS:-}" QUOTAGLANCE_HIDE_DEMO_BANNER="${QUOTAGLANCE_HIDE_DEMO_BANNER:-}" \
+    QG_APP_ARGS="${QG_APP_ARGS:-}" QG_APP_DELAY="${QG_APP_DELAY:-2}" "$0" "$@"
 fi
 SCHEME="${2:-dark}"
 MODE="${3:-extension}"
@@ -32,10 +33,11 @@ rm -f "$OUT/capture.log"
 
 EXTS="'qg-capture@quotaglance.dev'"
 cp -r "$ROOT/scripts/shell-capture/qg-capture@quotaglance.dev" "$XDG_DATA_HOME/gnome-shell/extensions/"
-if [ "$MODE" = "extension" ]; then
+if [ "$MODE" = "extension" ] || [ "$MODE" = "both" ]; then
   cp -r "$ROOT/extension/quotaglance@rafay-ah.github.io" "$XDG_DATA_HOME/gnome-shell/extensions/"
   EXTS="$EXTS, 'quotaglance@rafay-ah.github.io'"
-else
+fi
+if [ "$MODE" = "tray" ] || [ "$MODE" = "both" ]; then
   EXTS="$EXTS, 'ubuntu-appindicators@ubuntu.com'"
 fi
 
@@ -67,13 +69,15 @@ dbus-run-session -- bash -c "
   gsettings set org.gnome.shell welcome-dialog-last-shown-version '999'
   gsettings set org.gnome.desktop.interface color-scheme 'prefer-$SCHEME'
   gsettings set org.gnome.desktop.interface enable-animations false
+  if [ -n \"\${QG_NO_BANNERS:-}\" ]; then gsettings set org.gnome.desktop.notifications show-banners false; fi
   gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/gnome/$BG'
   gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/gnome/$BG'
   gnome-shell --headless --wayland --no-x11 --virtual-monitor 1440x900 > '$OUT/shell.log' 2>&1 &
   SHELL_PID=\$!
   for i in \$(seq 1 50); do [ -S \"\$XDG_RUNTIME_DIR/wayland-0\" ] && break; sleep 0.2; done
-  sleep 2
+  sleep \${QG_APP_DELAY:-2}
   WAYLAND_DISPLAY=wayland-0 GDK_BACKEND=wayland PYTHONPATH='$ROOT/src' \
+    ADW_DEBUG_COLOR_SCHEME=prefer-$SCHEME \
     $PY -m quotaglance --demo \${QG_APP_ARGS:-} > '$OUT/app.log' 2>&1 &
   for i in \$(seq 1 120); do grep -q '^done' '$OUT/capture.log' 2>/dev/null && break; sleep 0.5; done
   kill \$SHELL_PID 2>/dev/null || true

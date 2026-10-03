@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 import gi
 
 gi.require_version("Gtk", "4.0")
@@ -362,7 +364,8 @@ class MainWindow(Adw.ApplicationWindow):
         if refreshing and not updated:
             subtitle = _("Updating…")
         self.title_widget.set_subtitle(subtitle)
-        self.banner.set_revealed(engine.demo)
+        # Screenshot tooling hides the demo banner (QUOTAGLANCE_HIDE_DEMO_BANNER=1).
+        self.banner.set_revealed(engine.demo and not os.environ.get("QUOTAGLANCE_HIDE_DEMO_BANNER"))
 
         if not views:
             self.stack.set_visible_child_name("empty")
