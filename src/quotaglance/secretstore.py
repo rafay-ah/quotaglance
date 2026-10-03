@@ -29,12 +29,21 @@ class SecretStore:
     def clear(self, provider: str, key: str = "api_key") -> bool:
         raise NotImplementedError
 
+    def search(self, attributes: dict[str, str]) -> list[tuple[dict[str, str], str]]:
+        """Find items stored by *other* apps (e.g. Zed) by attribute match.
+
+        Returns (attributes, secret) pairs. Read-only.
+        """
+        return []
+
 
 class MemorySecretStore(SecretStore):
     available = True
 
-    def __init__(self, values: dict[tuple[str, str], str] | None = None) -> None:
+    def __init__(self, values: dict[tuple[str, str], str] | None = None,
+                 foreign: list[tuple[dict[str, str], str]] | None = None) -> None:
         self._values = dict(values or {})
+        self._foreign = list(foreign or [])
 
     def lookup(self, provider: str, key: str = "api_key") -> str | None:
         return self._values.get((provider, key))
@@ -45,6 +54,10 @@ class MemorySecretStore(SecretStore):
 
     def clear(self, provider: str, key: str = "api_key") -> bool:
         return self._values.pop((provider, key), None) is not None
+
+    def search(self, attributes: dict[str, str]) -> list[tuple[dict[str, str], str]]:
+        return [(attrs, secret) for attrs, secret in self._foreign
+                if all(attrs.get(k) == v for k, v in attributes.items())]
 
 
 class KeyringSecretStore(SecretStore):
@@ -114,6 +127,35 @@ class KeyringSecretStore(SecretStore):
         with self._lock:
             self._cache.pop((provider, key), None)
         return bool(removed)
+
+    def search(self, attributes: dict[str, str]) -> list[tuple[dict[str, str], str]]:
+        if not self.available:
+            return []
+        Secret = self._secret
+        schema = Secret.Schema.new(
+            "org.freedesktop.Secret.Generic", Secret.SchemaFlags.DONT_MATCH_NAME,
+            {name: Secret.SchemaAttributeType.STRING for name in attributes})
+        flags = Secret.SearchFlags.ALL | Secret.SearchFlags.UNLOCK | Secret.SearchFlags.LOAD_SECRETS
+        try:
+            items = Secret.password_search_sync(schema, attributes, flags, None)
+        except Exception as exc:
+            log.warning("Keyring search failed: %s", exc)
+            return []
+        results = []
+        for item in items or []:
+            try:
+                value = item.retrieve_secret_sync(None)
+            except Exception:
+                value = None
+            if value is None:
+                continue
+            text = value.get_text() if hasattr(value, "get_text") else None
+            if text is None:
+                raw = value.get()
+                text = bytes(raw).decode("utf-8", errors="replace") if raw is not None else None
+            if text:
+                results.append((dict(item.get_attributes() or {}), text))
+        return results
 
     def forget_cache(self) -> None:
         with self._lock:

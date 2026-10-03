@@ -1,0 +1,15 @@
+{
+  "login": "octocat",
+  "copilot_plan": "business",
+  "token_based_billing": true,
+  "quota_reset_date": "2026-11-01",
+  "quota_snapshots": {
+    "premium_interactions": {"entitlement": 0, "remaining": 0, "percent_remaining": 100,
+                             "quota_id": "premium_interactions", "unlimited": true,
+                             "overage_permitted": true, "overage_count": 0, "credits_used": 31},
+    "chat": {"entitlement": 0, "remaining": 0, "percent_remaining": 100, "quota_id": "chat",
+             "unlimited": true, "credits_used": 0},
+    "completions": {"entitlement": 0, "remaining": 0, "percent_remaining": 100,
+                    "quota_id": "completions", "unlimited": true}
+  }
+}

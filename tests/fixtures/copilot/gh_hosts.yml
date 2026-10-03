@@ -1,0 +1,9 @@
+github.com:
+    users:
+        octocat:
+            oauth_token: gho_nested_should_not_win
+    git_protocol: https
+    user: octocat
+    oauth_token: gho_cliToken0123456789
+ghe.corp.example:
+    oauth_token: gho_enterprise_token

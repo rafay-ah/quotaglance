@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <component name="AIAssistantQuotaManager2">
+    <option value="{&quot;type&quot;: &quot;Exceeded&quot;, &quot;current&quot;: &quot;1000000&quot;, &quot;maximum&quot;: &quot;1000000&quot;, &quot;tariffQuota&quot;: {&quot;current&quot;: &quot;1000000&quot;, &quot;maximum&quot;: &quot;1000000&quot;, &quot;available&quot;: &quot;0&quot;}}" name="quotaInfo" />
+  </component>
+</application>

@@ -136,6 +136,7 @@ class FetchContext:
     settings: dict[str, Any] = field(default_factory=dict)
     now: Callable[[], datetime] = utcnow
     runner: Runner = _default_runner
+    bin_dirs: tuple[str, ...] = _EXTRA_BIN_DIRS
 
     @classmethod
     def default(cls, http: Http, secrets: SecretStore, settings: dict[str, Any] | None = None
@@ -189,7 +190,7 @@ class FetchContext:
         if found:
             return found
         candidates: list[str] = []
-        for directory in _EXTRA_BIN_DIRS:
+        for directory in self.bin_dirs:
             candidates.append(str(self.path(directory) / name))
         nvm = sorted(glob.glob(str(self.path("~/.nvm/versions/node/*/bin") / name)),
                      reverse=True)

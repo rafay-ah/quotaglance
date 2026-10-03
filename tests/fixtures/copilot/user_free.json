@@ -1,0 +1,14 @@
+{
+  "login": "octocat",
+  "access_type_sku": "free_engaged_oss_quota",
+  "copilot_plan": "free",
+  "quota_reset_date": "2026-11-01",
+  "quota_reset_date_utc": "2026-11-01T00:00:00.000Z",
+  "quota_snapshots": {
+    "chat": {"entitlement": 50, "remaining": 31, "percent_remaining": 62.0, "quota_id": "chat"},
+    "completions": {"entitlement": 2000, "remaining": 1989, "percent_remaining": 99.45,
+                    "quota_id": "completions"},
+    "premium_interactions": {"entitlement": 0, "remaining": 0, "percent_remaining": 0,
+                             "quota_id": "premium_interactions"}
+  }
+}

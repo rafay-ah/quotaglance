@@ -9,6 +9,7 @@ from quotaglance.providers.copilot import CopilotProvider
 from quotaglance.providers.cursor import CursorProvider
 from quotaglance.providers.elevenlabs import ElevenLabsProvider
 from quotaglance.providers.gemini import GeminiProvider
+from quotaglance.providers.jetbrains import JetBrainsProvider
 from quotaglance.providers.kiro import KiroProvider
 from quotaglance.providers.opencode import OpenCodeProvider
 from quotaglance.providers.openrouter import OpenRouterProvider
@@ -19,6 +20,7 @@ PROVIDER_CLASSES: tuple[type[Provider], ...] = (
     CodexProvider,
     CursorProvider,
     CopilotProvider,
+    JetBrainsProvider,
     GeminiProvider,
     KiroProvider,
     ElevenLabsProvider,

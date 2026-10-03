@@ -1,0 +1,6 @@
+{
+  "copilot_plan": "individual",
+  "monthly_quotas": {"chat": 500, "completions": 4000},
+  "limited_user_quotas": {"chat": 125, "completions": 60},
+  "limited_user_reset_date": "2026-10-15"
+}
