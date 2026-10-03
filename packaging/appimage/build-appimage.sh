@@ -23,6 +23,12 @@ ARCH="$(uname -m)"
 MULTIARCH="$(dpkg-architecture -qDEB_HOST_MULTIARCH 2>/dev/null || echo "$ARCH-linux-gnu")"
 LIBDIR="/usr/lib/$MULTIARCH"
 PYVER="$("$PY" -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+# The bundled interpreter must be the one PyGObject was built for.
+if ! "$PY" -c 'import gi, cairo' 2>/dev/null; then
+  echo "error: $PY (Python $PYVER) cannot import gi and cairo; set PYTHON to the" \
+    "interpreter python3-gi was built for (e.g. PYTHON=python3.12)" >&2
+  exit 1
+fi
 TOOLS="${QG_TOOLS_DIR:-$ROOT/build/tools}"
 WORK="$(mktemp -d)"
 APPDIR="$WORK/AppDir"
