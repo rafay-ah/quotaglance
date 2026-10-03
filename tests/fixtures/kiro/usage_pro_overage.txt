@@ -1,0 +1,9 @@
+Estimated Usage | resets on 2026-11-01 | KIRO PRO+
+Credits (1000.00 of 1000 covered in plan)
+████████████████████████████████████████████████████████████████████████████████ 100%
+
+Overages: Enabled  billed at $0.04 per request
+Credits used: 52.75
+Est. cost: $2.11 USD
+
+To manage your plan or configure overages navigate to https://app.kiro.dev/account/usage

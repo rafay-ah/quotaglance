@@ -1,0 +1,4 @@
+Plan: Q Developer Pro
+Your plan is managed by admin
+
+Tip: to see context window usage, run /context

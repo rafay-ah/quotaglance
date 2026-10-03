@@ -1,0 +1,3 @@
+Failed to initialize auth portal.
+Please try again with: kiro-cli login --use-device-flow
+error: OAuth error: All callback ports are in use.

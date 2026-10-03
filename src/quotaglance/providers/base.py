@@ -123,8 +123,59 @@ _EXTRA_BIN_DIRS = (
 )
 
 
-def _default_runner(argv: Sequence[str], **kwargs: Any) -> subprocess.CompletedProcess:
-    return subprocess.run(list(argv), capture_output=True, text=True, check=False, **kwargs)
+def _default_runner(argv: Sequence[str], timeout: float | None = None,
+                    idle_timeout: float | None = None, **kwargs: Any
+                    ) -> subprocess.CompletedProcess:
+    if not idle_timeout:
+        return subprocess.run(list(argv), capture_output=True, text=True, check=False,
+                              timeout=timeout, **kwargs)
+    return _run_with_idle_cutoff(list(argv), timeout or 30.0, idle_timeout, **kwargs)
+
+
+def _run_with_idle_cutoff(argv: list[str], timeout: float, idle: float, **kwargs: Any
+                          ) -> subprocess.CompletedProcess:
+    """Run a CLI that may keep a TUI alive after printing: stop once it goes quiet."""
+    import os
+    import signal
+    import threading
+    import time
+
+    kwargs.pop("capture_output", None)
+    proc = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            start_new_session=True, **kwargs)
+    chunks: dict[str, list[bytes]] = {"out": [], "err": []}
+    last_output = [0.0]
+
+    def pump(stream, key: str) -> None:
+        for block in iter(lambda: stream.read1(4096), b""):
+            chunks[key].append(block)
+            last_output[0] = time.monotonic()
+
+    threads = [threading.Thread(target=pump, args=(proc.stdout, "out"), daemon=True),
+               threading.Thread(target=pump, args=(proc.stderr, "err"), daemon=True)]
+    for thread in threads:
+        thread.start()
+    deadline = time.monotonic() + timeout
+    killed = False
+    while proc.poll() is None:
+        now = time.monotonic()
+        quiet = last_output[0] and now - last_output[0] > idle
+        if now > deadline or quiet:
+            killed = True
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except (ProcessLookupError, PermissionError):
+                proc.kill()
+            proc.wait(2)
+            if not quiet and not last_output[0]:
+                raise subprocess.TimeoutExpired(argv, timeout)
+            break
+        time.sleep(0.05)
+    for thread in threads:
+        thread.join(1)
+    out = b"".join(chunks["out"]).decode("utf-8", errors="replace")
+    err = b"".join(chunks["err"]).decode("utf-8", errors="replace")
+    return subprocess.CompletedProcess(argv, 0 if killed else proc.returncode, out, err)
 
 
 @dataclass
@@ -201,13 +252,16 @@ class FetchContext:
         return None
 
     def run(self, argv: Sequence[str], timeout: float = 20.0,
-            extra_env: Mapping[str, str] | None = None) -> subprocess.CompletedProcess:
+            extra_env: Mapping[str, str] | None = None,
+            idle_timeout: float | None = None) -> subprocess.CompletedProcess:
         env = dict(self.env)
         env.update({"NO_COLOR": "1", "TERM": "dumb", "CI": "1"})
         if extra_env:
             env.update(extra_env)
+        extra = {"idle_timeout": idle_timeout} if idle_timeout else {}
         try:
-            return self.runner(list(argv), timeout=timeout, env=env, stdin=subprocess.DEVNULL)
+            return self.runner(list(argv), timeout=timeout, env=env, stdin=subprocess.DEVNULL,
+                               **extra)
         except subprocess.TimeoutExpired as exc:
             raise ProviderError(_("`{cmd}` timed out").format(cmd=" ".join(argv[:3])),
                                 transient=True) from exc

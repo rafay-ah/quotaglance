@@ -1,0 +1,7 @@
+{"daysUntilReset": 29, "limits": [], "nextDateReset": 1.7934912E9,
+ "overageConfiguration": {"overageStatus": "DISABLED"},
+ "subscriptionInfo": {"subscriptionTitle": "KIRO FREE", "type": "Q_DEVELOPER_STANDALONE_FREE"},
+ "usageBreakdownList": [{"bonuses": [], "currency": "USD", "currentOverages": 0, "currentOveragesWithPrecision": 0.0,
+   "currentUsage": 17, "currentUsageWithPrecision": 17.5, "nextDateReset": 1.7934912E9,
+   "overageCap": 0, "overageCapWithPrecision": 0.0, "overageCharges": 0.0, "overageRate": 0.04,
+   "resourceType": "CREDIT", "usageLimit": 50, "usageLimitWithPrecision": 50.0}]}
