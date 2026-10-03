@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import ssl
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from typing import Any
@@ -65,6 +66,39 @@ class Response:
         return self.body.decode("utf-8", errors="replace")
 
 
+_SECRET_HEADER_PARTS = ("auth", "cookie", "token", "key", "secret", "session")
+
+
+def is_secret_header(name: str) -> bool:
+    lowered = name.lower()
+    return any(part in lowered for part in _SECRET_HEADER_PARTS)
+
+
+class _SafeRedirects(urllib.request.HTTPRedirectHandler):
+    """Follow redirects without leaking credentials.
+
+    urllib copies every header onto the redirected request, whatever the
+    host. Credentials are dropped when the host changes, and an HTTPS request
+    is never redirected to plain HTTP.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        old = urllib.parse.urlsplit(req.full_url)
+        new = urllib.parse.urlsplit(newurl)
+        if old.scheme == "https" and new.scheme != "https":
+            return None  # surfaces as an HttpError with the 3xx status
+        redirected = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if redirected is not None and new.netloc.lower() != old.netloc.lower():
+            for name in [n for n in redirected.headers if is_secret_header(n)]:
+                del redirected.headers[name]
+        return redirected
+
+
+class _NoRedirects(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 class Http:
     """Blocking HTTP client. Providers call it from worker threads."""
 
@@ -72,10 +106,13 @@ class Http:
         self.timeout = timeout
         self.user_agent = user_agent
         self._ssl = ssl.create_default_context()
+        https = urllib.request.HTTPSHandler(context=self._ssl)
+        self._opener = urllib.request.build_opener(https, _SafeRedirects())
+        self._strict_opener = urllib.request.build_opener(https, _NoRedirects())
 
     def request(self, method: str, url: str, *, headers: dict[str, str] | None = None,
                 json_body: Any = None, data: bytes | None = None,
-                timeout: float | None = None) -> Response:
+                timeout: float | None = None, follow_redirects: bool = True) -> Response:
         all_headers = {"User-Agent": self.user_agent, "Accept": "application/json"}
         if headers:
             all_headers.update(headers)
@@ -83,9 +120,9 @@ class Http:
             data = json.dumps(json_body).encode("utf-8")
             all_headers.setdefault("Content-Type", "application/json")
         req = urllib.request.Request(url, data=data, method=method.upper(), headers=all_headers)
+        opener = self._opener if follow_redirects else self._strict_opener
         try:
-            with urllib.request.urlopen(req, timeout=timeout or self.timeout,
-                                        context=self._ssl) as resp:
+            with opener.open(req, timeout=timeout or self.timeout) as resp:
                 return Response(resp.status, url, resp.read(), dict(resp.headers.items()))
         except urllib.error.HTTPError as exc:
             body = b""

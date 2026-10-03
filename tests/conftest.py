@@ -48,10 +48,12 @@ class FakeHttp(Http):
     def add(self, method: str, url: str, value: Any) -> None:
         self.routes[(method.upper(), url)] = value
 
-    def request(self, method, url, *, headers=None, json_body=None, data=None, timeout=None):
+    def request(self, method, url, *, headers=None, json_body=None, data=None, timeout=None,
+                follow_redirects=True):
         method = method.upper()
         self.calls.append({"method": method, "url": url, "headers": dict(headers or {}),
-                           "json": json_body, "data": data})
+                           "json": json_body, "data": data,
+                           "follow_redirects": follow_redirects})
         matches = [(k, v) for k, v in self.routes.items()
                    if k[0] == method and url.startswith(k[1])]
         if not matches:
