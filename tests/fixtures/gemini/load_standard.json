@@ -1,0 +1,8 @@
+{
+  "currentTier": {"id": "standard-tier", "name": "Gemini Code Assist",
+                  "description": "Unlimited coding assistant with the most powerful Gemini models",
+                  "userDefinedCloudaicompanionProject": true, "hasAcceptedTos": true},
+  "allowedTiers": [{"id": "standard-tier", "name": "Gemini Code Assist",
+                    "userDefinedCloudaicompanionProject": true, "isDefault": true}],
+  "cloudaicompanionProject": "acme-gca-prod-4821"
+}
