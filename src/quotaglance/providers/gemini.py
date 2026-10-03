@@ -256,7 +256,7 @@ def resolve_plan(info: dict[str, Any], hosted_domain: str | None) -> str | None:
         return info["paid_name"]
     tier = info.get("tier")
     if tier == "standard-tier":
-        return _("Paid")
+        return _("Standard")
     if tier == "free-tier":
         return _("Workspace") if hosted_domain else _("Free")
     if tier == "legacy-tier":

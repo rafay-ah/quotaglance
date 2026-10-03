@@ -44,31 +44,31 @@ DEMO: dict[str, tuple[str, str, list[DemoWindow]]] = {
         DemoWindow("session", "5-hour", 18, 6.0, 3 * H + 47 * 60, 5 * H),
         DemoWindow("weekly", "Weekly", 82, 0.5, 2 * D + 1 * H, 7 * D),
     ]),
-    "cursor": ("Pro", "Cursor dashboard API", [
+    "cursor": ("Pro", "Cursor dashboard", [
         DemoWindow("monthly", "Included", 54, 0.3, 12 * D + 6 * H, 30 * D, 20.0, "USD"),
         DemoWindow("on_demand", "On-demand", 16, 0.1, 12 * D + 6 * H, 30 * D, 20.0, "USD"),
     ]),
-    "copilot": ("Pro", "GitHub API", [
-        DemoWindow("premium", "Premium", 96, 0.2, 9 * D + 3 * H, 30 * D, 300, "requests"),
-        DemoWindow("chat", "Chat", 0, 0.0, 9 * D + 3 * H, 30 * D),
+    "copilot": ("Pro", "Copilot plugin sign-in", [
+        DemoWindow("premium", "Premium", 96, 0.2, 9 * D + 3 * H, 30 * D, 300, None),
     ]),
-    "gemini": ("Free", "Gemini CLI credentials", [
-        DemoWindow("pro", "Pro models", 23, 2.0, 14 * H + 20 * 60, D),
-        DemoWindow("flash", "Flash models", 8, 1.0, 14 * H + 20 * 60, D),
+    "gemini": ("Standard", "Gemini CLI sign-in", [
+        DemoWindow("pro", "Pro", 23, 2.0, 14 * H + 20 * 60, D, 1500, "requests"),
+        DemoWindow("flash", "Flash", 8, 1.0, 14 * H + 20 * 60, D, 2000, "requests"),
     ]),
-    "kiro": ("Pro", "kiro-cli", [
+    "kiro": ("Kiro Pro", "kiro-cli", [
         DemoWindow("credits", "Credits", 34, 0.4, 18 * D + 2 * H, 30 * D, 1000, "credits"),
     ]),
     "elevenlabs": ("Creator", "ElevenLabs API", [
         DemoWindow("credits", "Credits", 61, 0.3, 11 * D + 9 * H, 30 * D, 100_000, "credits"),
     ]),
-    "opencode": ("Go", "Local history", [
+    "opencode": ("Go", "OpenCode Go API", [
         DemoWindow("session", "5-hour", 34, 4.0, 1 * H + 52 * 60, 5 * H, 12.0, "USD"),
         DemoWindow("weekly", "Weekly", 47, 0.8, 4 * D + 7 * H, 7 * D, 30.0, "USD"),
         DemoWindow("monthly", "Monthly", 37, 0.3, 21 * D, 30 * D, 60.0, "USD"),
     ]),
-    "zai": ("GLM Coding Pro", "z.ai API", [
+    "zai": ("Pro", "OpenCode sign-in", [
         DemoWindow("session", "5-hour", 12, 5.0, 4 * H + 5 * 60, 5 * H),
+        DemoWindow("weekly", "Weekly", 29, 0.5, 3 * D + 12 * H, 7 * D),
         DemoWindow("mcp", "MCP tools", 4, 0.1, 17 * D, 30 * D, 1000, "calls"),
     ]),
     "openrouter": ("Pay as you go", "OpenRouter API", [

@@ -75,7 +75,7 @@ def test_plan_resolution():
     assert paid["project"] == "cloudaicompanion-fixture-123"
     assert paid["credits"] == 1350
     standard = parse_load_code_assist(load_json("gemini", "load_standard.json"))
-    assert resolve_plan(standard, None) == "Paid"
+    assert resolve_plan(standard, None) == "Standard"
     free = parse_load_code_assist(load_json("gemini", "load_free_workspace.json"))
     assert resolve_plan(free, "example.com") == "Workspace"
     assert resolve_plan(free, None) == "Free"
@@ -89,7 +89,7 @@ def test_fetch_with_valid_token(home):
     snap = GeminiProvider().fetch(make_ctx(home, http=http))
     assert http.last(QUOTA)["json"] == {"project": "acme-gca-prod-4821"}
     assert http.last(QUOTA)["headers"]["Authorization"] == "Bearer ya29.cached"
-    assert snap.plan == "Paid"
+    assert snap.plan == "Standard"
     assert snap.account == "dev@example.com"
     assert snap.windows[0].id == "pro"
 
