@@ -1,0 +1,31 @@
+{
+  "user_id": "user-Fx7QkV2mN9pLr3Ts8Wd1Ab0C",
+  "account_id": "8f3c2a9e-5b1d-4e7f-a6c0-2d9b7e4f1a35",
+  "email": "dev.fixture@example.com",
+  "plan_type": "plus",
+  "rate_limit": {
+    "allowed": true,
+    "limit_reached": false,
+    "primary_window": {"used_percent": 37, "limit_window_seconds": 18000, "reset_after_seconds": 8500, "reset_at": 1790958291},
+    "secondary_window": {"used_percent": 58, "limit_window_seconds": 604800, "reset_after_seconds": 372869, "reset_at": 1791322660}
+  },
+  "credits": {
+    "has_credits": false, "unlimited": false, "overage_limit_reached": false, "balance": "0E-10",
+    "approx_local_messages": [0, 0], "approx_cloud_messages": [0, 0]
+  },
+  "spend_control": {"reached": false, "individual_limit": null},
+  "additional_rate_limits": [
+    {
+      "limit_name": "GPT-5.3-Codex-Spark",
+      "metered_feature": "codex_bengalfox",
+      "rate_limit": {
+        "allowed": true, "limit_reached": false,
+        "primary_window": {"used_percent": 12, "limit_window_seconds": 18000, "reset_after_seconds": 14809, "reset_at": 1790964600},
+        "secondary_window": {"used_percent": 4, "limit_window_seconds": 604800, "reset_after_seconds": 493759, "reset_at": 1791443550}
+      }
+    }
+  ],
+  "rate_limit_reached_type": null,
+  "rate_limit_reset_credits": {"available_count": 1},
+  "rate_limit_upsell": null
+}

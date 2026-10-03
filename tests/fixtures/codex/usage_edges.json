@@ -1,0 +1,16 @@
+{
+  "unknown_window": {"rate_limit": {"primary_window": {"used_percent": 17, "reset_at": 1790982191, "limit_window_seconds": 32400}, "secondary_window": null}},
+  "reversed": {"rate_limit": {
+    "primary_window": {"used_percent": 58, "reset_at": 1791322660, "limit_window_seconds": 604800},
+    "secondary_window": {"used_percent": 37, "reset_at": 1790958291, "limit_window_seconds": 18000}}},
+  "credits_only": {"plan_type": "pro", "rate_limit": {"primary_window": null, "secondary_window": null},
+    "credits": {"has_credits": true, "unlimited": false, "balance": "14.5"}},
+  "malformed_extra": {"rate_limit": {"primary_window": {"used_percent": 37, "reset_at": 1790958291, "limit_window_seconds": 18000}},
+    "additional_rate_limits": ["garbage", {"limit_name": "X", "rate_limit": {"primary_window": {"used_percent": "bad"}}}]},
+  "code_review": {"code_review_rate_limit": {"allowed": true, "limit_reached": false,
+    "primary_window": {"used_percent": 0, "limit_window_seconds": 604800, "reset_after_seconds": 604800, "reset_at": 1791554591},
+    "secondary_window": null}},
+  "other_model": {"rate_limit": {"primary_window": {"used_percent": 20, "limit_window_seconds": 18000, "reset_at": 1790958291}},
+    "additional_rate_limits": [{"limit_name": "GPT-6-Codex-Max", "metered_feature": "codex_otter",
+      "rate_limit": {"primary_window": {"used_percent": 44, "limit_window_seconds": 604800, "reset_at": 1791322660}, "secondary_window": null}}]}
+}

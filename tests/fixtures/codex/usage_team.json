@@ -1,0 +1,21 @@
+{
+  "plan_type": "team",
+  "account_id": "6c1e3a5b-7d9f-4b2a-8c4e-0f2a4c6e8b1d",
+  "rate_limit": {
+    "allowed": false,
+    "limit_reached": true,
+    "primary_window": {"used_percent": 100, "limit_window_seconds": 604800, "reset_after_seconds": 208609, "reset_at": 1791158400},
+    "secondary_window": null
+  },
+  "credits": {"has_credits": true, "unlimited": false, "balance": null},
+  "spend_control": {
+    "reached": false,
+    "individual_limit": {
+      "source": "workspace_spend_controls",
+      "limit": "2500", "used": "612.40377807617188", "remaining": "1887.59622192382812",
+      "used_percent": 24, "remaining_percent": 76,
+      "reset_after_seconds": 2541409, "reset_at": 1793491200
+    }
+  },
+  "rate_limit_reached_type": {"type": "workspace_member_usage_limit_reached"}
+}

@@ -1,0 +1,13 @@
+{
+  "user_id": "user-Pq8Lm2Nx5Kc1Vb7Zr4Hs9Ty0",
+  "account_id": "2d4f6a8c-0e1b-4c3d-9e5f-7a9b1c3d5e7f",
+  "email": "pro.fixture@example.com",
+  "plan_type": "prolite",
+  "rate_limit": {
+    "allowed": true,
+    "limit_reached": false,
+    "primary_window": {"used_percent": 11, "limit_window_seconds": 18000, "reset_after_seconds": 6115, "reset_at": 1790955906},
+    "secondary_window": {"used_percent": 23, "limit_window_seconds": 604800, "reset_after_seconds": 211744, "reset_at": 1791161535}
+  },
+  "credits": {"has_credits": false, "unlimited": false, "overage_limit_reached": false, "balance": "0E-10"}
+}
