@@ -1,0 +1,8 @@
+{
+  "five_hour": {"utilization": 5.0, "resets_at": "2026-10-03T18:00:00.771200+00:00"},
+  "seven_day": {"utilization": 33.0, "resets_at": "2026-10-06T07:00:00.771231+00:00"},
+  "seven_day_design": null,
+  "seven_day_omelette": {"utilization": 31.0, "resets_at": "2026-10-06T07:00:00.771239+00:00"},
+  "seven_day_routines": null,
+  "seven_day_cowork": {"utilization": 8.0, "resets_at": "2026-10-06T07:00:00.771244+00:00"}
+}

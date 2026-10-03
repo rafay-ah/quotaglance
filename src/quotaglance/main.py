@@ -27,12 +27,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--preferences", action="store_true", help="open Preferences")
     parser.add_argument("--quit", action="store_true", help="quit the running instance")
     parser.add_argument("--debug", action="store_true", help="verbose logging")
+    parser.add_argument("--claude-statusline", action="store_true",
+                        help="internal: Claude Code status-line bridge (reads JSON on stdin)")
     parser.add_argument("--version", action="version", version=f"{APP_NAME} {__version__}")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv if argv is None else argv)
+    if "--claude-statusline" in argv[1:]:
+        # Claude Code status-line tap: must stay fast, so no GTK and no argparse.
+        from quotaglance.claude_statusline import tap_main
+
+        return tap_main()
     args, _unknown = build_parser().parse_known_args(argv[1:])
     logging.basicConfig(
         level=logging.DEBUG if args.debug or os.environ.get("QUOTAGLANCE_DEBUG") else

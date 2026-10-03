@@ -188,6 +188,7 @@ class FetchContext:
     now: Callable[[], datetime] = utcnow
     runner: Runner = _default_runner
     bin_dirs: tuple[str, ...] = _EXTRA_BIN_DIRS
+    force: bool = False  # a user-initiated refresh: skip optional caching
 
     @classmethod
     def default(cls, http: Http, secrets: SecretStore, settings: dict[str, Any] | None = None
@@ -292,6 +293,14 @@ class Provider:
     def detect(self, ctx: FetchContext) -> bool:
         """Cheap, offline check: does this machine look set up for the provider?"""
         return False
+
+    def setting_value(self, ctx: FetchContext, spec: SettingSpec) -> Any:
+        """Current value of a setting; override for settings that live elsewhere."""
+        return ctx.settings.get(spec.key, spec.default)
+
+    def apply_setting(self, ctx: FetchContext, key: str, value: Any) -> str | None:
+        """Side effects of changing a setting. Return a message for the user, if any."""
+        return None
 
     def fetch(self, ctx: FetchContext) -> ProviderSnapshot:
         raise NotImplementedError

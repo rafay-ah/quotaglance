@@ -172,6 +172,7 @@ class Engine:
             self.in_flight.add(pid)
             started = True
             ctx = self.context_for(provider)
+            ctx.force = force
             future = self._executor.submit(self._fetch, provider, ctx)
             future.add_done_callback(lambda f, p=provider: self._done(p, f))
         if started:

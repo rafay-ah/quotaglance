@@ -1,0 +1,20 @@
+{
+  "five_hour": {"utilization": 23.0, "resets_at": "2026-10-03T14:00:00.512937+00:00"},
+  "seven_day": {"utilization": 41.0, "resets_at": "2026-10-07T09:00:00.512962+00:00"},
+  "seven_day_oauth_apps": null,
+  "seven_day_opus": null,
+  "seven_day_sonnet": {"utilization": 12.0, "resets_at": "2026-10-07T09:00:00.512970+00:00"},
+  "seven_day_cowork": null,
+  "seven_day_omelette": {"utilization": 3.0, "resets_at": "2026-10-07T09:00:00.512977+00:00"},
+  "iguana_necktie": null,
+  "extra_usage": {"is_enabled": false, "monthly_limit": null, "used_credits": null, "utilization": null},
+  "limits": [
+    {"kind": "session", "group": "session", "percent": 23,
+     "resets_at": "2026-10-03T14:00:00.512937+00:00", "scope": null, "is_active": true},
+    {"kind": "weekly_all", "group": "weekly", "percent": 41,
+     "resets_at": "2026-10-07T09:00:00.512962+00:00", "scope": null, "is_active": false},
+    {"kind": "weekly_scoped", "group": "weekly", "percent": 12,
+     "resets_at": "2026-10-07T09:00:00.512970+00:00",
+     "scope": {"model": {"id": null, "display_name": "Sonnet"}, "surface": null}, "is_active": false}
+  ]
+}

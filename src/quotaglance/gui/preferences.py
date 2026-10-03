@@ -252,19 +252,26 @@ class PreferencesDialog(Adw.PreferencesDialog):
 
     def _setting_row(self, provider, spec):
         settings = self.config.provider_settings(provider.id)
+        ctx = self.app.engine.context_for(provider)
         if spec.kind == "secret":
             return self._secret_row(provider, spec)
         if spec.kind == "choice":
             values = [value for value, _label in spec.choices]
             labels = [label for _value, label in spec.choices]
-            current = settings.get(spec.key, spec.default)
+            current = provider.setting_value(ctx, spec)
             return _combo_row(spec.title, spec.subtitle, labels,
                               values.index(current) if current in values else 0,
                               lambda i: self._set_provider(provider.id, spec.key, values[i]))
         if spec.kind == "switch":
-            return _switch_row(spec.title, spec.subtitle,
-                               bool(settings.get(spec.key, spec.default)),
-                               lambda v: self._set_provider(provider.id, spec.key, v))
+            row = None
+
+            def changed(value: bool) -> None:
+                if not self._set_provider(provider.id, spec.key, value) and row is not None:
+                    row.set_active(not value)
+
+            row = _switch_row(spec.title, spec.subtitle, bool(provider.setting_value(ctx, spec)),
+                              changed)
+            return row
         if spec.kind == "text":
             entry = Adw.EntryRow(title=esc(spec.title), show_apply_button=True)
             entry.set_text(str(settings.get(spec.key, spec.default) or ""))
@@ -316,9 +323,19 @@ class PreferencesDialog(Adw.PreferencesDialog):
         clear.connect("clicked", remove)
         return entry
 
-    def _set_provider(self, provider_id: str, key: str, value) -> None:
+    def _set_provider(self, provider_id: str, key: str, value) -> bool:
+        engine = self.app.engine
+        provider = engine.providers[provider_id]
+        try:
+            message = provider.apply_setting(engine.context_for(provider), key, value)
+        except Exception as exc:  # e.g. a settings file we could not update
+            self.add_toast(Adw.Toast(title=esc(str(getattr(exc, "message", exc))), timeout=5))
+            return False
         self.config.set_provider(provider_id, key, value)
-        self.app.engine.refresh([provider_id])
+        if message:
+            self.add_toast(Adw.Toast(title=esc(message), timeout=4))
+        engine.refresh([provider_id])
+        return True
 
     # -- live status ------------------------------------------------------------------
 
