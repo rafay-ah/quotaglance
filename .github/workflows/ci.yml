@@ -31,6 +31,9 @@ jobs:
         run: ruff check src tests scripts
       - name: Unit tests
         run: python -m pytest -q
+      - name: Provider table in README is current
+        if: matrix.python == '3.12'
+        run: python scripts/provider_table.py --check
 
   gui:
     name: GTK smoke test and screenshots

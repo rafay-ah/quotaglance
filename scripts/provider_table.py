@@ -32,8 +32,9 @@ def table() -> str:
     for cls in sorted(PROVIDER_CLASSES, key=lambda c: (order.index(c.category), c.name.lower())):
         name = f"[{cls.name}]({cls.homepage})" if cls.homepage else cls.name
         source = cls.source_summary.replace("|", "\\|")
-        setup = cls.setup_hint.replace("|", "\\|")
-        local = " (offline)" if cls.local_only else ""
+        # Hints are written for Preferences, where the key field sits below them.
+        setup = cls.setup_hint.replace("|", "\\|").replace(" below", " in Preferences")
+        local = " (offline)" if cls.local_only and "local" not in source.lower() else ""
         lines.append(f"| {name} | {CATEGORIES[cls.category]} | {source}{local} | {setup} |")
     return "\n".join(lines)
 

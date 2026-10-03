@@ -7,7 +7,7 @@
 <p align="center">
   <b>Your AI coding quotas at a glance, natively on GNOME.</b><br>
   Session, weekly and monthly limits for Claude Code, Codex, Cursor, Copilot, Gemini CLI, Kiro,
-  ElevenLabs, OpenCode and more, with reset countdowns, in your top bar and on your desktop.
+  OpenCode, ElevenLabs and 21 more, with reset countdowns, in your top bar and on your desktop.
 </p>
 
 <p align="center">
@@ -43,7 +43,8 @@ resets before you start the long refactor.
   never asks for passwords, and there is no QuotaGlance server and no telemetry.
 - **Native and light.** Python, GTK 4 and libadwaita: no Electron, no web views. It follows your
   light/dark style and accent colour and uses GNOME's own notifications and keyring.
-- **Many providers**, each one toggleable. See [Supported providers](#supported-providers).
+- **29 providers**, each one toggleable: coding agents, editors, coding plans and API platforms.
+  See [Supported providers](#supported-providers).
 
 <p align="center">
   <img src="docs/screenshots/tour.gif" alt="A tour: widget sizes, the top-bar popup and the main window" width="88%">
@@ -132,6 +133,37 @@ Turn providers on and off in **Preferences → Providers**. On first launch Quot
 every provider it finds signed in on this computer.
 
 <!-- providers:start -->
+| Provider | Category | Data source | Setup |
+| --- | --- | --- | --- |
+| [Amp](https://ampcode.com/settings) | Coding agents | `amp usage` (CLI), or Amp's balance API with an access token | Install the Amp CLI and run `amp login`, or paste an Amp access token in Preferences. |
+| [Augment](https://app.augmentcode.com/account) | Coding agents | `auggie account status`, or auggie's sign-in → Augment billing API | Install the auggie CLI (npm install -g @augmentcode/auggie) and run `auggie login`. |
+| [Claude Code](https://claude.ai/settings/usage) | Coding agents | Claude Code sign-in → Anthropic usage API, status line, local logs | Install Claude Code and sign in with your Claude subscription (run `claude`). |
+| [Codebuff](https://www.codebuff.com/usage) | Coding agents | Codebuff CLI sign-in or API key → Codebuff usage API | Run `codebuff login`, or paste a Codebuff API key in Preferences. |
+| [Codex](https://chatgpt.com/codex/settings/usage) | Coding agents | Codex session logs + ChatGPT usage (via Codex's own login) | Install the Codex CLI and sign in with ChatGPT (`codex login`). |
+| [Factory Droid](https://app.factory.ai/settings/billing) | Coding agents | Factory billing API (API key) | Create an API key at app.factory.ai/settings/api-keys and paste it in Preferences, or set FACTORY_API_KEY. |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | Coding agents | Gemini CLI sign-in → Code Assist quota API | Run `gemini` and sign in with a Code Assist Standard or Enterprise account. |
+| [OpenCode](https://opencode.ai/auth) | Coding agents | OpenCode Go usage API + local OpenCode history | Sign in to OpenCode Go or Zen with `opencode auth login`; QuotaGlance reads OpenCode's saved key and history. |
+| [Warp](https://app.warp.dev/settings/billing) | Coding agents | Warp request-limit API (personal API key) | Create a personal API key in Warp (Settings → Cloud platform → API keys) and paste it in Preferences. |
+| [Antigravity](https://antigravity.google) | Editors & IDEs | Antigravity CLI (`agy`) usage report | Install the Antigravity CLI (1.1.11 or later) and run `agy` once to sign in with Google. |
+| [Cline](https://app.cline.bot/dashboard) | Editors & IDEs | ClinePass usage API (Cline sign-in or API key) | Paste a Cline API key in Preferences (best for background updates), or run `cline auth`. |
+| [Cursor](https://cursor.com/dashboard) | Editors & IDEs | Cursor app sign-in → Cursor usage dashboard | Install Cursor and sign in. QuotaGlance reuses that session (read-only). |
+| [GitHub Copilot](https://github.com/settings/copilot) | Editors & IDEs | Editor or GitHub CLI sign-in → GitHub Copilot API | Sign in to Copilot in VS Code, JetBrains or Neovim, or run `gh auth login`. You can also paste a GitHub OAuth token in Preferences. |
+| [JetBrains AI](https://www.jetbrains.com/ai/) | Editors & IDEs | Quota file written by your JetBrains IDE (local) | Use AI Assistant once in any JetBrains IDE; it then records its quota locally. |
+| [Kilo Code](https://app.kilo.ai/profile) | Editors & IDEs | Kilo CLI sign-in or API token → Kilo usage API | Run `kilo auth login`, or paste a Kilo API token in Preferences. |
+| [Kiro](https://app.kiro.dev/account/usage) | Editors & IDEs | kiro-cli /usage report + Kiro usage API | Install kiro-cli and run `kiro-cli login`, or sign in to the Kiro IDE. |
+| [Windsurf](https://windsurf.com/subscription/usage) | Editors & IDEs | Windsurf app sign-in → Windsurf usage API (or the app's cache) | Install Windsurf and sign in. QuotaGlance reuses that session (read-only). |
+| [Zed](https://zed.dev/account) | Editors & IDEs | Zed editor sign-in (GNOME Keyring) → Zed cloud API | Sign in from the Zed editor (command palette → “client: sign in”); QuotaGlance reads that sign-in from GNOME Keyring. |
+| [Chutes](https://chutes.ai) | Coding plans & API platforms | Chutes subscription and quota API (API key) | Create an API key at chutes.ai (an admin key, or one allowed to read user info), and paste it in Preferences. |
+| [DeepSeek](https://platform.deepseek.com/usage) | Coding plans & API platforms | DeepSeek balance API (API key) | Create an API key at platform.deepseek.com → API keys, and paste it in Preferences. |
+| [Kimi Code](https://www.kimi.com/code/console) | Coding plans & API platforms | Kimi Code usage API (API key or Kimi Code CLI) | Create an API key in the Kimi Code console (kimi.com/code/console) and paste it in Preferences, or sign in with the `kimi` CLI. |
+| [MiniMax](https://platform.minimax.io/user-center/payment/coding-plan?cycle_type=3) | Coding plans & API platforms | MiniMax Token Plan quota API (API key) | Copy your Token Plan key (sk-cp-…) from platform.minimax.io → Token Plan, and paste it in Preferences. |
+| [Moonshot](https://platform.moonshot.ai/console/account) | Coding plans & API platforms | Moonshot / Kimi Open Platform balance API (API key) | Create an API key at platform.moonshot.ai (or platform.moonshot.cn) → API Keys, and paste it in Preferences. |
+| [OpenRouter](https://openrouter.ai/settings/credits) | Coding plans & API platforms | OpenRouter key and credits API (API key) | Create an API key at openrouter.ai → Settings → API Keys, and paste it in Preferences. |
+| [Poe](https://poe.com/api_key) | Coding plans & API platforms | Poe usage API (API key) | Copy your API key from poe.com/api_key, and paste it in Preferences. |
+| [Synthetic](https://synthetic.new) | Coding plans & API platforms | Synthetic quotas API (API key) | Create an API key in your synthetic.new account (see dev.synthetic.new/docs/api/getting-started), and paste it in Preferences. |
+| [Vercel AI Gateway](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai-gateway) | Coding plans & API platforms | AI Gateway credits API (API key) | Create an API key in the Vercel dashboard → AI Gateway → API Keys, and paste it in Preferences. |
+| [z.ai](https://z.ai/manage-apikey/coding-plan/personal/my-plan) | Coding plans & API platforms | GLM Coding Plan quota API (API key) | Paste your z.ai API key in Preferences, or sign in to z.ai in OpenCode. |
+| [ElevenLabs](https://elevenlabs.io/app/subscription) | Voice & media | ElevenLabs subscription API (API key) | Create an API key with the User → Read permission at elevenlabs.io → Developers → API keys, and paste it in Preferences. |
 <!-- providers:end -->
 
 How the data is read, in short:
