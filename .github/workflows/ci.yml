@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --upgrade pytest ruff
+      - name: Lint
+        run: ruff check src tests scripts
+      - name: Unit tests
+        run: python -m pytest -q
+
+  gui:
+    name: GTK smoke test and screenshots
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GTK 4 and libadwaita
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3-gi python3-gi-cairo \
+            gir1.2-gtk-4.0 gir1.2-adw-1 gir1.2-secret-1 weston dbus-daemon \
+            fonts-cantarell adwaita-icon-theme librsvg2-common
+      - name: Render every surface in demo mode
+        run: |
+          export XDG_RUNTIME_DIR="$(mktemp -d)"
+          chmod 700 "$XDG_RUNTIME_DIR"
+          weston --backend=headless --socket=wayland-ci --width=1600 --height=1000 --idle-time=0 &
+          for i in $(seq 1 50); do [ -S "$XDG_RUNTIME_DIR/wayland-ci" ] && break; sleep 0.2; done
+          export WAYLAND_DISPLAY=wayland-ci GDK_BACKEND=wayland
+          dbus-run-session -- /usr/bin/python3 scripts/capture.py --out screenshots
+          dbus-run-session -- /usr/bin/python3 scripts/capture.py --out screenshots --dark
+          ls -l screenshots
+          test "$(ls screenshots/*.png | wc -l)" -ge 10
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/
+
+  metadata:
+    name: Extension and desktop metadata
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Extension syntax
+        run: |
+          node --check extension/quotaglance@rafay-ah.github.io/extension.js
+          python3 -m json.tool extension/quotaglance@rafay-ah.github.io/metadata.json > /dev/null
+      - name: Desktop entry and AppStream
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends desktop-file-utils appstream
+          desktop-file-validate data/io.github.rafay_ah.QuotaGlance.desktop
+          appstreamcli validate --no-net --pedantic data/io.github.rafay_ah.QuotaGlance.metainfo.xml || \
+            appstreamcli validate --no-net data/io.github.rafay_ah.QuotaGlance.metainfo.xml

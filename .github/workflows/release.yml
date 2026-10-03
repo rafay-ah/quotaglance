@@ -1,0 +1,82 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build and (re)publish, e.g. v0.1.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build .deb and AppImage
+    runs-on: ubuntu-24.04
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - name: Check the tag matches the version
+        run: |
+          version="$(sed -n 's/^__version__ = "\(.*\)"/\1/p' src/quotaglance/__init__.py)"
+          test "v$version" = "$TAG" || { echo "Tag $TAG does not match version $version"; exit 1; }
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3 python3-gi python3-gi-cairo \
+            python3-cairo python3-pytest gir1.2-gtk-4.0 gir1.2-adw-1 gir1.2-secret-1 libgtk-4-1 \
+            libadwaita-1-0 libsecret-1-0 librsvg2-common libglib2.0-bin dconf-gsettings-backend \
+            adwaita-icon-theme desktop-file-utils appstream file
+      - name: Unit tests
+        run: python3 -m pytest -q
+      - name: Build .deb
+        run: packaging/deb/build-deb.sh dist
+      - name: Build AppImage
+        run: packaging/appimage/build-appimage.sh dist
+      - name: Smoke-test both packages
+        run: |
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          ./dist/QuotaGlance-*-x86_64.AppImage --version
+          ./dist/QuotaGlance-*-x86_64.AppImage --status --demo
+          sudo apt-get install -y ./dist/quotaglance_*_all.deb
+          quotaglance --version
+          quotaglance --json --demo | python3 -m json.tool > /dev/null
+      - name: Checksums
+        run: cd dist && sha256sum * > SHA256SUMS && cat SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: dist/
+      - name: Release notes
+        run: |
+          version="${TAG#v}"
+          awk -v ver="$version" '
+            $0 ~ "^## \\[?" ver "\\]?" { found=1; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          cat >> notes.md <<'NOTES'
+
+          ### Install
+
+          **Ubuntu / Debian (.deb):** `sudo apt install ./quotaglance_*_all.deb`, then open QuotaGlance from the app grid.
+
+          **AppImage:** `chmod +x QuotaGlance-*-x86_64.AppImage && ./QuotaGlance-*-x86_64.AppImage`
+
+          To get the rich top-bar popup, enable the GNOME Shell extension from Preferences → Top Bar (log out and back in once). On Ubuntu the tray icon works right away.
+          NOTES
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+          else
+            gh release create "$TAG" dist/* --title "QuotaGlance ${TAG#v}" --notes-file notes.md
+          fi
