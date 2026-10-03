@@ -202,7 +202,7 @@ def build_windows(cli: dict[str, Any] | None, api: dict[str, Any] | None,
             detail=_("${charges:.2f} so far").format(charges=api["charges"])
             if api.get("charges") is not None else None))
     elif cli.get("overage") and cli["overage"][1]:
-        status, credits_used, cost = cli["overage"]
+        _status, credits_used, cost = cli["overage"]
         detail = _("{n:g} credits").format(n=credits_used)
         if cost is not None:
             detail += f" · ${cost:.2f}"

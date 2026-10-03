@@ -41,7 +41,8 @@ UNSUPPORTED_AUTH = {
     "gateway": _("a gateway"),
 }
 CLIENT_ID_RE = re.compile(r"(?:const|let|var)?\s*OAUTH_CLIENT_ID\s*=\s*['\"]([\w\-\.]+)['\"]\s*;")
-CLIENT_SECRET_RE = re.compile(r"(?:const|let|var)?\s*OAUTH_CLIENT_SECRET\s*=\s*['\"]([\w\-]+)['\"]\s*;")
+CLIENT_SECRET_RE = re.compile(
+    r"(?:const|let|var)?\s*OAUTH_CLIENT_SECRET\s*=\s*['\"]([\w\-]+)['\"]\s*;")
 
 _lock = threading.Lock()
 _access_cache: dict[str, tuple[str, float]] = {}  # refresh token -> (access token, expiry)
