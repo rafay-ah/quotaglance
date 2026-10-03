@@ -1,0 +1,42 @@
+#!/bin/sh
+# QuotaGlance AppImage entry point: run the bundled Python with the bundled
+# GTK 4 / libadwaita stack, while leaving the host's theme, fonts, icons,
+# Mesa drivers and D-Bus services in charge.
+HERE="$(dirname "$(readlink -f "$0")")"
+export APPDIR="${APPDIR:-$HERE}"
+
+# Remember the host's values so child processes (provider CLIs, Extensions
+# app) can be started with a clean environment; see quotaglance.envutil.
+for name in PYTHONHOME PYTHONPATH PYTHONNOUSERSITE PYTHONDONTWRITEBYTECODE GI_TYPELIB_PATH \
+            GIO_MODULE_DIR GSETTINGS_SCHEMA_DIR GDK_PIXBUF_MODULE_FILE GDK_PIXBUF_MODULEDIR \
+            GTK_PATH XDG_DATA_DIRS SSL_CERT_FILE; do
+  eval "value=\${$name-__QG_UNSET__}"
+  export "QUOTAGLANCE_HOST_$name=$value"
+done
+
+export PYTHONHOME="$APPDIR/usr"
+export PYTHONPATH="$APPDIR/usr/share/quotaglance"
+export PYTHONNOUSERSITE=1
+export PYTHONDONTWRITEBYTECODE=1
+export GI_TYPELIB_PATH="$APPDIR/usr/lib/girepository-1.0"
+export GIO_MODULE_DIR="$APPDIR/usr/lib/gio/modules"
+export GSETTINGS_SCHEMA_DIR="$APPDIR/usr/share/glib-2.0/schemas"
+export GTK_PATH="$APPDIR/usr/lib/gtk-4.0"
+export XDG_DATA_DIRS="$APPDIR/usr/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+# Image loaders (SVG icons): build the loader cache for this location.
+export GDK_PIXBUF_MODULEDIR="$APPDIR/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders"
+cache_dir="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/quotaglance-appimage-$(id -u)"
+mkdir -p "$cache_dir" 2>/dev/null
+export GDK_PIXBUF_MODULE_FILE="$cache_dir/loaders.cache"
+"$APPDIR/usr/bin/gdk-pixbuf-query-loaders" > "$GDK_PIXBUF_MODULE_FILE" 2>/dev/null || true
+
+# The bundled OpenSSL looks for Debian's CA path; point it at the host's bundle.
+if [ -z "${SSL_CERT_FILE:-}" ]; then
+  for bundle in /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt \
+                /etc/ssl/ca-bundle.pem /etc/ssl/cert.pem /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem; do
+    if [ -f "$bundle" ]; then export SSL_CERT_FILE="$bundle"; break; fi
+  done
+fi
+
+exec "$APPDIR/usr/bin/python3" -s -m quotaglance "$@"

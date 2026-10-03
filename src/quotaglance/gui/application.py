@@ -108,6 +108,9 @@ class QuotaGlanceApp(Adw.Application):
                 connection, PANEL_BUS_NAME, Gio.BusNameWatcherFlags.NONE,
                 lambda *_a: self.set_panel_attached(True),
                 lambda *_a: self.set_panel_attached(False))
+        from quotaglance.integration import integrate_appimage
+
+        integrate_appimage()
         # A background service: windows may come and go.
         self.hold()
         self._held = True

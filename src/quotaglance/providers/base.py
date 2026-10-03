@@ -192,7 +192,9 @@ class FetchContext:
     @classmethod
     def default(cls, http: Http, secrets: SecretStore, settings: dict[str, Any] | None = None
                 ) -> FetchContext:
-        return cls(home=Path.home(), env=dict(os.environ), http=http, secrets=secrets,
+        from quotaglance.envutil import host_environment
+
+        return cls(home=Path.home(), env=host_environment(), http=http, secrets=secrets,
                    settings=settings or {})
 
     def path(self, value: str) -> Path:

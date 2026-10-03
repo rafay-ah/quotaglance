@@ -160,11 +160,22 @@ class ShellIntegration:
 
 
 def launch_extensions_app() -> None:
+    from quotaglance.envutil import overridden_names
+
+    context = Gio.AppLaunchContext()
+    for name, value in overridden_names().items():
+        if value is None:
+            context.unsetenv(name)
+        else:
+            context.setenv(name, value)
     for app_id in ("org.gnome.Extensions.desktop", "com.mattjakeman.ExtensionManager.desktop"):
-        info = Gio.DesktopAppInfo.new(app_id)
+        try:
+            info = Gio.DesktopAppInfo.new(app_id)
+        except TypeError:
+            info = None
         if info is not None:
             try:
-                info.launch([], None)
+                info.launch([], context)
                 return
             except GLib.Error:
                 continue

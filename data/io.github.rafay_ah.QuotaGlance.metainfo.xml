@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.rafay_ah.QuotaGlance</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>QuotaGlance</name>
+  <summary>See your AI coding quotas at a glance</summary>
+  <developer id="io.github.rafay_ah">
+    <name>rafay-ah</name>
+  </developer>
+  <description>
+    <p>
+      QuotaGlance keeps an eye on the usage limits of the AI tools you use every
+      day (Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, Kiro,
+      ElevenLabs, OpenCode and more) and shows how much is left and when each
+      limit resets, so you never hit a wall mid-task.
+    </p>
+    <ul>
+      <li>A usage meter in the top bar with a detailed popup per provider</li>
+      <li>A desktop widget in three sizes, inspired by macOS widgets</li>
+      <li>Session, weekly and monthly windows with reset countdowns</li>
+      <li>Notifications at 80% and 95% usage</li>
+      <li>Reads the sign-ins your tools already keep locally; API keys go to GNOME Keyring</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">io.github.rafay_ah.QuotaGlance.desktop</launchable>
+  <provides>
+    <binary>quotaglance</binary>
+  </provides>
+  <url type="homepage">https://github.com/rafay-ah/quotaglance</url>
+  <url type="bugtracker">https://github.com/rafay-ah/quotaglance/issues</url>
+  <url type="vcs-browser">https://github.com/rafay-ah/quotaglance</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Top bar indicator and desktop widget</caption>
+      <image>https://raw.githubusercontent.com/rafay-ah/quotaglance/main/docs/screenshots/hero.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Main window</caption>
+      <image>https://raw.githubusercontent.com/rafay-ah/quotaglance/main/docs/screenshots/main-light.png</image>
+    </screenshot>
+  </screenshots>
+  <branding>
+    <color type="primary" scheme_preference="light">#d9dde6</color>
+    <color type="primary" scheme_preference="dark">#2b2f38</color>
+  </branding>
+  <content_rating type="oars-1.1"/>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <releases>
+    <release version="0.1.0" date="2026-10-03">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Application
+Name=QuotaGlance
+GenericName=AI Quota Monitor
+Comment=See your AI coding quotas and reset times at a glance
+Exec=quotaglance
+Icon=io.github.rafay_ah.QuotaGlance
+Terminal=false
+Categories=GTK;GNOME;Utility;
+Keywords=claude;codex;cursor;copilot;gemini;kiro;quota;usage;limit;tokens;ai;
+StartupNotify=true
+DBusActivatable=true
+SingleMainWindow=true
+X-GNOME-UsesNotifications=true
+Actions=widget;preferences;
+
+[Desktop Action widget]
+Name=Toggle Desktop Widget
+Exec=quotaglance --widget
+
+[Desktop Action preferences]
+Name=Preferences
+Exec=quotaglance --preferences
