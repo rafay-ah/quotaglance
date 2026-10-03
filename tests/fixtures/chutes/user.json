@@ -1,0 +1,5 @@
+{"username": "alice", "user_id": "5f2c8f1e-7a3b-4c9d-8e1f-0a2b3c4d5e6f", "logo_id": null,
+ "created_at": "2025-11-02T10:14:51.120314", "hotkey": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+ "coldkey": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+ "payment_address": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
+ "permissions_bitmask": 0, "balance": 12.4831, "netuids": [], "quotas": null, "permissions": [], "logo": null}

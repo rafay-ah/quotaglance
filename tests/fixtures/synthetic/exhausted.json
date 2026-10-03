@@ -1,0 +1,5 @@
+{
+  "rollingFiveHourLimit": {"nextTickAt": "2026-10-03T12:04:10.000Z", "tickPercent": 0.05, "remaining": 0, "max": 750, "limited": true},
+  "weeklyTokenLimit": {"nextRegenAt": "2026-10-03T14:02:00.000Z", "percentRemaining": 12.5, "maxCredits": "$36.00",
+                       "remainingCredits": "$4.50", "nextRegenCredits": "$0.72"}
+}

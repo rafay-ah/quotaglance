@@ -1,0 +1,11 @@
+{
+  "has_more": true,
+  "data": [
+    {"creation_time": 1791027000123456, "bot_name": "Claude-Sonnet-4.6", "query_id": "q_9f1c2a7d4b",
+     "usage_type": "API", "cost_points": 1420},
+    {"creation_time": 1791019800000000, "bot_name": "GPT-5.6", "query_id": "q_77ab01c3e2",
+     "usage_type": "Chat", "cost_points": 3100},
+    {"creation_time": 1790949600500000, "bot_name": "Gemini-3-Flash", "query_id": "q_0c4d9e8f1a",
+     "usage_type": "Canvas App", "cost_points": 260}
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "data": {
+    "label": "sk-or-v1-3b9...f2a4b",
+    "limit": 100,
+    "limit_remaining": 61.27,
+    "limit_reset": "monthly",
+    "include_byok_in_limit": false,
+    "usage": 212.43,
+    "usage_daily": 2.18,
+    "usage_weekly": 9.4,
+    "usage_monthly": 38.73,
+    "byok_usage": 0,
+    "byok_usage_daily": 0,
+    "byok_usage_weekly": 0,
+    "byok_usage_monthly": 0,
+    "is_free_tier": false,
+    "is_management_key": false,
+    "is_provisioning_key": false,
+    "expires_at": null,
+    "creator_user_id": "user_2xQ7mN4bV9cK1pL3",
+    "organization_id": null,
+    "workspace_id": null,
+    "rate_limit": {"requests": -1, "interval": "10s", "note": "This field is deprecated and safe to ignore."},
+    "free_model_daily_requests": {"limit": 1000, "remaining": 962, "used": 38},
+    "allowed_data_regions": []
+  }
+}

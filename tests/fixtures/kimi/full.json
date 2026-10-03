@@ -1,0 +1,22 @@
+{
+  "user": {"membership": {"level": "LEVEL_INTERMEDIATE"}},
+  "version": "GOODS_VERSION_V1",
+  "usage": {"limit": "7168", "used": "1290", "remaining": "5878", "resetTime": "2026-10-08T03:00:00.483211Z"},
+  "limits": [
+    {"window": {"duration": 300, "timeUnit": "TIME_UNIT_MINUTE"},
+     "detail": {"limit": "200", "used": "83", "remaining": "117", "resetTime": "2026-10-03T15:20:00.112093Z"}}
+  ],
+  "parallel": {"limit": "20"},
+  "usages": {
+    "limit_5h": {"used_ratio": 0.415, "reset_time": "2026-10-03T15:20:00Z"},
+    "limit_7d": {"used_ratio": 0.18, "reset_time": "2026-10-08T03:00:00Z"},
+    "limit_month_total": {"used_ratio": 0.0731, "reset_time": "2026-10-21T00:00:00Z"},
+    "limit_month_code": {"used_ratio": 0.051, "reset_time": "2026-10-21T00:00:00Z"}
+  },
+  "boosterWallet": {
+    "balance": {"type": "BOOSTER", "amount": "2000000000", "amountLeft": "1234000000"},
+    "monthlyChargeLimitEnabled": true,
+    "monthlyChargeLimit": {"priceInCents": "5000", "currency": "USD"},
+    "monthlyUsed": {"priceInCents": "766", "currency": "USD"}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "subscription": {"limit": 1350, "requests": 412.5, "renewsAt": "2026-10-03T14:36:14.288Z"},
+  "search": {"hourly": {"limit": 250, "requests": 17, "renewsAt": "2026-10-03T12:30:01.494Z"}},
+  "weeklyTokenLimit": {
+    "nextRegenAt": "2026-10-03T13:21:30.000Z",
+    "percentRemaining": 71.25,
+    "maxCredits": "$36.00",
+    "remainingCredits": "$25.65",
+    "nextRegenCredits": "$0.72"
+  },
+  "rollingFiveHourLimit": {
+    "nextTickAt": "2026-10-03T12:11:42.000Z",
+    "tickPercent": 0.05,
+    "remaining": 412,
+    "max": 750,
+    "limited": false
+  }
+}

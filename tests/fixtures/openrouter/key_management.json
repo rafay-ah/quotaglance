@@ -1,0 +1,15 @@
+{
+  "data": {
+    "label": "mgmt",
+    "limit": null,
+    "limit_remaining": null,
+    "limit_reset": null,
+    "usage": 0,
+    "usage_daily": 0,
+    "usage_weekly": 0,
+    "usage_monthly": 0,
+    "is_free_tier": false,
+    "is_management_key": true,
+    "is_provisioning_key": true
+  }
+}

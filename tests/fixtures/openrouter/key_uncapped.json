@@ -1,0 +1,22 @@
+{
+  "data": {
+    "label": "Laptop",
+    "limit": null,
+    "limit_remaining": null,
+    "limit_reset": null,
+    "include_byok_in_limit": false,
+    "usage": 57.904,
+    "usage_daily": 0.412,
+    "usage_weekly": 3.871,
+    "usage_monthly": 11.06,
+    "byok_usage": 1.25,
+    "byok_usage_daily": 0,
+    "byok_usage_weekly": 0.5,
+    "byok_usage_monthly": 1.25,
+    "is_free_tier": false,
+    "is_management_key": false,
+    "is_provisioning_key": false,
+    "expires_at": "2027-06-30T23:59:59Z",
+    "free_model_daily_requests": {"limit": 1000, "remaining": 1000, "used": 0}
+  }
+}

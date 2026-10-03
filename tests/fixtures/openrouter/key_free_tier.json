@@ -1,0 +1,15 @@
+{
+  "data": {
+    "label": "hobby",
+    "limit": 5,
+    "limit_remaining": -0.12,
+    "limit_reset": "daily",
+    "usage": 0.37,
+    "usage_daily": 5.12,
+    "usage_weekly": 5.12,
+    "usage_monthly": 5.12,
+    "is_free_tier": true,
+    "is_management_key": false,
+    "free_model_daily_requests": {"limit": 50, "remaining": 0, "used": 50}
+  }
+}

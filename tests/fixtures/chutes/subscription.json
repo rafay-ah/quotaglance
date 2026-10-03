@@ -1,0 +1,20 @@
+{
+  "subscription": true,
+  "custom": false,
+  "monthly_price": 20.0,
+  "anchor_date": "2026-09-14T17:42:10.552318",
+  "effective_date": "2026-09-14T17:42:10.552318",
+  "updated_at": "2026-09-14T17:43:02.118274",
+  "four_hour": {
+    "usage": 3.4172,
+    "cap": 8.333333333333332,
+    "remaining": 4.916133333333333,
+    "reset_at": "2026-10-03T16:00:00+00:00"
+  },
+  "monthly": {
+    "usage": 41.86,
+    "cap": 100.0,
+    "remaining": 58.14,
+    "reset_at": "2026-10-14T17:42:10.552318+00:00"
+  }
+}
