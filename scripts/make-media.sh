@@ -2,6 +2,7 @@
 # Regenerate every image in docs/screenshots from demo data.
 #
 #   scripts/make-media.sh
+#   QG_MEDIA_GTK_ONLY=1 scripts/make-media.sh   # skip the GNOME Shell captures
 #
 # Needs: weston, gnome-shell, gnome-backgrounds, imagemagick, librsvg2-bin, Inter font,
 # and the GTK/libadwaita Python bindings. Uses throwaway sessions only.
@@ -35,17 +36,27 @@ cp "$TMP/gtk/main-light.png" "$TMP/gtk/main-dark.png" "$TMP/gtk/preferences-ligh
 echo ">> Widget gallery"
 bg="/usr/share/backgrounds/gnome/blobs-d.svg"
 sheet="$TMP/sheet"
+gtk="$TMP/gtk"
 mkdir -p "$sheet"
-for scheme in light dark; do
-  convert "$TMP/gtk/widget-small-$scheme.png" "$TMP/gtk/widget-medium-$scheme.png" \
-    -background none -gravity center -splice 24x0 +append "$sheet/row1-$scheme.png"
+# Clip each capture to the widget's rounded shape (24 px, as in style.css): the window
+# outline leaves faint alpha in the corners that the drop shadow below would square off.
+for png in "$gtk"/widget-*.png; do
+  read -r w h < <(identify -format '%w %h\n' "$png")
+  convert "$png" \( -size "${w}x${h}" xc:none -fill white \
+    -draw "roundrectangle 0,0,$((w - 1)),$((h - 1)),24,24" \) -compose DstIn -composite "$png"
 done
-convert "$TMP/gtk/widget-large-light.png" "$TMP/gtk/widget-large-dark.png" \
-  "$TMP/gtk/widget-medium-tinted-dark.png" -background none -gravity north -splice 24x0 +append \
-  "$sheet/row3.png"
-convert "$sheet/row1-light.png" "$sheet/row1-dark.png" -background none -gravity west \
-  -splice 0x24 -append "$sheet/col.png"
-convert "$sheet/col.png" "$sheet/row3.png" -background none -gravity north -splice 0x24 -append \
+# Row 1: small and medium, light then dark. Row 2: large light and dark, then the tinted
+# variants (one medium above two smalls). Both rows come out 1140 px wide.
+convert "$gtk/widget-small-light.png" "$gtk/widget-medium-light.png" \
+  "$gtk/widget-small-dark.png" "$gtk/widget-medium-dark.png" \
+  -background none -gravity north +smush 24 "$sheet/row1.png"
+convert "$gtk/widget-small-tinted-light.png" "$gtk/widget-small-tinted-dark.png" \
+  -background none -gravity north +smush 24 "$sheet/smalls.png"
+convert "$gtk/widget-medium-tinted-dark.png" "$sheet/smalls.png" \
+  -background none -gravity west -smush 24 "$sheet/tinted.png"
+convert "$gtk/widget-large-light.png" "$gtk/widget-large-dark.png" "$sheet/tinted.png" \
+  -background none -gravity north +smush 24 "$sheet/row2.png"
+convert "$sheet/row1.png" "$sheet/row2.png" -background none -gravity west -smush 24 \
   -bordercolor none -border 36 "$sheet/widgets-raw.png"
 # Soft drop shadow, then place on a wallpaper crop.
 convert "$sheet/widgets-raw.png" \( +clone -background black -shadow 45x14+0+8 \) +swap \
@@ -54,6 +65,8 @@ size="$(identify -format '%wx%h' "$sheet/widgets-shadow.png")"
 convert -density 96 "$bg" -resize "${size}^" -gravity center -extent "$size" "$sheet/bg.png"
 convert "$sheet/bg.png" "$sheet/widgets-shadow.png" -gravity center -composite \
   -resize '1400x>' "$OUT/widgets.png"
+
+if [ -n "${QG_MEDIA_GTK_ONLY:-}" ]; then ls -la "$OUT"; exit 0; fi
 
 echo ">> GNOME Shell: hero, notification, tray, tour"
 seed='{"first_run_complete": true, "autostart": false, "widget": {"visible": true, "size": "large", "position": [48, 72]}}'
