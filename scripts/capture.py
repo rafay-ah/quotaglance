@@ -17,6 +17,7 @@ import argparse
 import os
 import sys
 import tempfile
+import traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,7 +37,13 @@ gi.require_version("Graphene", "1.0")
 
 from gi.repository import Adw, GLib, Graphene, Gtk  # noqa: E402
 
+from quotaglance.gui import application  # noqa: E402
 from quotaglance.gui.application import QuotaGlanceApp  # noqa: E402
+from quotaglance.secretstore import MemorySecretStore  # noqa: E402
+
+# Screenshots never touch the real keyring (it may be locked or absent).
+application.KeyringSecretStore = MemorySecretStore
+WATCHDOG_SECONDS = 240
 
 
 def render(widget: Gtk.Widget, path: Path, pad: int = 0) -> None:
@@ -85,8 +92,16 @@ def main() -> int:
         app.config.set("autostart", False)
         app.config.set("widget.visible", False)
         GLib.timeout_add(2500, step)
+        GLib.timeout_add_seconds(WATCHDOG_SECONDS, give_up)
 
     queue: list = []
+    failures: list[str] = []
+
+    def give_up() -> bool:
+        print(f"capture: gave up after {WATCHDOG_SECONDS} s", file=sys.stderr)
+        failures.append("timeout")
+        app.quit_app()
+        return False
 
     def step() -> bool:
         if not queue:
@@ -95,7 +110,12 @@ def main() -> int:
             app.quit_app()
             return False
         action = queue.pop(0)
-        delay = action()
+        try:
+            delay = action()
+        except Exception:  # report it and keep going: one broken shot must not hang CI
+            traceback.print_exc()
+            failures.append(getattr(action, "__name__", "step"))
+            delay = None
         GLib.timeout_add(delay or 900, step)
         return False
 
@@ -151,7 +171,11 @@ def main() -> int:
             queue.append(shoot_providers)
 
     app.connect("startup", setup)
-    return app.run([sys.argv[0]])
+    status = app.run([sys.argv[0]])
+    if failures:
+        print(f"capture: failed steps: {', '.join(failures)}", file=sys.stderr)
+        return 1
+    return status
 
 
 if __name__ == "__main__":
