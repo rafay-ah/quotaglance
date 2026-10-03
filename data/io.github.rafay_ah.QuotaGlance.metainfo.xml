@@ -55,7 +55,8 @@
   <releases>
     <release version="0.1.0" date="2026-10-03">
       <description>
-        <p>First release.</p>
+        <p>First release: a top-bar meter, a desktop widget, usage notifications and 29
+        providers, including Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI and Kiro.</p>
       </description>
     </release>
   </releases>

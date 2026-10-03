@@ -3,7 +3,7 @@
 #
 #   scripts/make-media.sh
 #
-# Needs: weston, gnome-shell, gnome-backgrounds, imagemagick, Inter font,
+# Needs: weston, gnome-shell, gnome-backgrounds, imagemagick, librsvg2-bin, Inter font,
 # and the GTK/libadwaita Python bindings. Uses throwaway sessions only.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

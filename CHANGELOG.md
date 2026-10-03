@@ -18,10 +18,21 @@ First public release.
 - Desktop widget in small, medium and large sizes, with an optional tinted background;
   the Shell extension can keep it on top, on every workspace, at a remembered position.
 - Notifications at 80% and 95% usage, plus optional "limit reset" notices.
-- Providers: Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, Kiro, ElevenLabs,
-  OpenCode (Go and Zen), z.ai, JetBrains AI and more; see the README for the full list
-  and where each one gets its numbers.
-- API keys are stored in GNOME Keyring; local sign-ins are read without modification.
+- 29 providers, each toggleable:
+  - Coding agents: Claude Code, Codex, Gemini CLI, OpenCode (Go and Zen), Amp, Augment,
+    Factory Droid, Warp, Codebuff.
+  - Editors and IDEs: Cursor, GitHub Copilot, Kiro, JetBrains AI, Windsurf, Zed,
+    Antigravity, Kilo Code, Cline.
+  - Coding plans and API platforms: z.ai, Kimi Code, MiniMax, Synthetic, OpenRouter,
+    DeepSeek, Moonshot, Vercel AI Gateway, Chutes, Poe.
+  - Voice and media: ElevenLabs.
+
+  The README lists where each one gets its numbers.
+- Claude Code status-line bridge (opt-in): exact 5-hour and weekly usage with no network
+  calls, while keeping your own status line.
+- API keys are stored in GNOME Keyring. Local sign-ins and app databases are read without
+  modification, and rotating tokens (Claude, Codex, Cursor, Kiro) are never refreshed, so
+  QuotaGlance can't sign you out of your tools.
 - Demo mode with realistic mock data (`quotaglance --demo`).
 - `quotaglance --status` and `--json` for the terminal.
 - `.deb` and AppImage packages built by GitHub Actions.
